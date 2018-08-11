@@ -1,0 +1,9 @@
+{
+  "name": "conferencetools/speakers-module",
+  "description": "Provides speaker management and CRM functions",
+  "minimum-stability": "dev",
+  "license": "MIT",
+  "require": {
+    "zendframework/zend-mvc": "^3.0.1"
+  }
+}
