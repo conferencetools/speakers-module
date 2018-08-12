@@ -5,5 +5,10 @@
   "license": "MIT",
   "require": {
     "zendframework/zend-mvc": "^3.0.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "ConferenceTools\\Speakers\\": "src"
+    }
   }
 }
