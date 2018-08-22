@@ -4,7 +4,9 @@
   "minimum-stability": "dev",
   "license": "MIT",
   "require": {
-    "zendframework/zend-mvc": "^3.0.1"
+    "zendframework/zend-mvc": "^3.0.1",
+    "zendframework/zend-form": "^2.12",
+    "zendframework/zend-i18n": "^2.9@dev"
   },
   "autoload": {
     "psr-4": {

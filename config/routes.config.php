@@ -1,5 +1,6 @@
 <?php
 
+use ConferenceTools\Speakers\Controller;
 use Zend\Router\Http\Literal;
 use Zend\Router\Http\Placeholder;
 use Zend\Router\Http\Segment;
@@ -18,12 +19,22 @@ return [
                     ]
                 ]
             ],
+            'import' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/import',
+                    'defaults' => [
+                        'controller' => Controller\ImportController::class,
+                        'action' => 'index',
+                    ],
+                ]
+            ],
             'invitation' => [
                 'type' => Segment::class,
                 'options' => [
                     'route' => '/invitation/:speakerId',
                     'defaults' => [
-                        'controller' => \ConferenceTools\Speakers\Controller\InvitationController::class,
+                        'controller' => Controller\InvitationController::class,
                         'action' => 'index',
                     ]
                 ],

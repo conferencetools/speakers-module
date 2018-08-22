@@ -24,7 +24,7 @@ class Speaker extends AbstractActor
     private $bio;
     private $accepted;
 
-    protected function handleInvitedToSpeak(InviteToSpeak $command)
+    protected function handleInviteToSpeak(InviteToSpeak $command)
     {
         if (empty($this->name)){
             $this->fire(
