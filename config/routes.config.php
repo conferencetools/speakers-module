@@ -60,10 +60,30 @@ return [
                     ],
                 ],
             ],
+            'profile' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/profile/:speakerId',
+                    'defaults' => [
+                        'controller' => \ConferenceTools\Speakers\Controller\ProfileController::class,
+                    ],
+                ],
+                'child_routes' => [
+                    'edit' => [
+                        'type' => Segment::class,
+                        'options' => [
+                            'route' => '/edit',
+                            'defaults' => [
+                                'action' => 'edit'
+                            ],
+                        ],
+                    ],
+                ],
+            ],
             'talk' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/talk/:speakerid',
+                    'route' => '/talk/:speakerId',
                     'defaults' => [
                         'controller' => \ConferenceTools\Speakers\Controller\TalkController::class,
                     ],
@@ -103,7 +123,7 @@ return [
                 'options' => [
                     'route' => '/dashboard',
                     'defaults' => [
-                        'controller' => '', //@TODO
+                        'controller' => Controller\DashboardController::class,
                         'action' => 'index',
                     ]
                 ]

@@ -4,11 +4,16 @@
 namespace ConferenceTools\Speakers\Controller;
 
 
+use ConferenceTools\Speakers\Domain\Dashboard\Entity\Speaker;
 use ConferenceTools\Speakers\Domain\Speaker\Command\AddAdditionalTalk;
 use ConferenceTools\Speakers\Domain\Speaker\Command\CancelTalk;
 use ConferenceTools\Speakers\Domain\Speaker\Command\UpdateTalk;
 use ConferenceTools\Speakers\Domain\Speaker\Talk;
+use Zend\Form\Element\Submit;
+use Zend\Form\Element\Text;
+use Zend\Form\Element\Textarea;
 use Zend\View\Model\ViewModel;
+use Zend\Form\Form;
 
 class TalkController extends AppController
 {
@@ -30,7 +35,6 @@ class TalkController extends AppController
     {
         //probably restrict this to admins
 
-        //@TODO bring in Zend form
         $form = new Form();
 
         $speakerId = $this->params()->fromRoute('speakerId');
@@ -55,10 +59,22 @@ class TalkController extends AppController
 
     public function editAction()
     {
-        //probably restrict this to admins
+        $speakerId = $this->params()->fromRoute('speakerId');
+        $talkId = $this->params()->fromRoute('talkId');
+        /** @var Speaker $speaker */
+        $speaker = $this->repository(Speaker::class)->get($speakerId);
+        $talk = $speaker->getTalk($talkId);
 
-        //@TODO bring in Zend form
+        $data = [
+            'title' => $talk->getTitle(),
+            'abstract' => $talk->getAbstract()
+        ];
+
         $form = new Form();
+        $form->add(new Text('title', ['label' => 'Title']));
+        $form->add(new Textarea('abstract', ['label' => 'Abstract']));
+        $form->add(new Submit('submit', ['value' => 'Edit']));
+        $form->setData($data);
 
         $speakerId = $this->params()->fromRoute('speakerId');
         $talkId = (int) $this->params()->fromRoute('talkId');
@@ -74,7 +90,7 @@ class TalkController extends AppController
 
                 //redirect base on role
                 //add flash message
-                return;
+                $this->redirect()->toRoute('speakers/dashboard');
             }
         }
 

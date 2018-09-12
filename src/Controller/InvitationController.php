@@ -4,6 +4,7 @@
 namespace ConferenceTools\Speakers\Controller;
 
 
+use ConferenceTools\Speakers\Domain\Dashboard\Entity\Speaker;
 use ConferenceTools\Speakers\Domain\Speaker\Command\AcceptInvitation;
 use ConferenceTools\Speakers\Domain\Speaker\Command\DeclineInvitation;
 use Zend\View\Model\ViewModel;
@@ -12,14 +13,27 @@ class InvitationController extends AppController
 {
     public function indexAction()
     {
-        //@TODO retrieve speaker information (Eg talks selected)
+        $speakerId = $this->params()->fromRoute('speakerId');
+        /** @var Speaker $speaker */
+        $speaker = $this->repository(Speaker::class)->get($speakerId);
 
-        return new ViewModel();
+        if ($speaker->hasResponded()) {
+            return $this->redirect()->toRoute('speakers/dashboard');
+        }
+
+        return new ViewModel(['speaker' => $speaker]);
     }
 
     public function acceptInvitationAction()
     {
         $speakerId = $this->params()->fromRoute('speakerId');
+        /** @var Speaker $speaker */
+        $speaker = $this->repository(Speaker::class)->get($speakerId);
+
+        if ($speaker->hasResponded()) {
+            return $this->redirect()->toRoute('speakers/dashboard');
+        }
+
         $command = new AcceptInvitation($speakerId);
         //@TODO catch errors and display
         $this->messageBus()->fire($command);
@@ -29,7 +43,15 @@ class InvitationController extends AppController
 
     public function declineInvitationAction()
     {
+        //@TODO do we need a confirmation box?
         $speakerId = $this->params()->fromRoute('speakerId');
+        /** @var Speaker $speaker */
+        $speaker = $this->repository(Speaker::class)->get($speakerId);
+
+        if ($speaker->hasResponded()) {
+            return $this->redirect()->toRoute('speakers/dashboard');
+        }
+
         $command = new DeclineInvitation($speakerId);
         //@TODO catch errors and display
         $this->messageBus()->fire($command);

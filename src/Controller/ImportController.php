@@ -59,9 +59,6 @@ class ImportController extends AppController
                     ...$talks
                 )
             );
-echo '<pre>';
-            \var_dump($events);
-            echo '</pre>';
         }
     }
 }

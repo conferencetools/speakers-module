@@ -1,14 +1,19 @@
 <?php
 
+
 namespace ConferenceTools\Speakers\Domain\Speaker\Command;
 
+use Carnage\Phactor\Message\HasActorId;
 use ConferenceTools\Speakers\Domain\Speaker\Bio;
 use ConferenceTools\Speakers\Domain\Speaker\Email;
-use ConferenceTools\Speakers\Domain\Speaker\Talk;
 use JMS\Serializer\Annotation as Jms;
 
-class InviteToSpeak
+class UpdateProfile implements HasActorId
 {
+    /**
+     * @Jms\Type("string")
+     */
+    private $actorId;
     /**
      * @Jms\Type("string")
      */
@@ -18,20 +23,26 @@ class InviteToSpeak
      */
     private $email;
     /**
-     * @Jms\Type("array<ConferenceTools\Speakers\Domain\Speaker\Talk>")
-     */
-    private $talks;
-    /**
      * @Jms\Type("ConferenceTools\Speakers\Domain\Speaker\Bio")
      */
     private $bio;
+    /**
+     * @Jms\Type("string")
+     */
+    private $specialRequirements;
 
-    public function __construct(string $name, Bio $bio, Email $email, Talk ...$talks)
+    public function __construct(string $actorId, string $name, Email $email, Bio $bio, string $specialRequirements)
     {
+        $this->actorId = $actorId;
         $this->name = $name;
         $this->email = $email;
-        $this->talks = $talks;
         $this->bio = $bio;
+        $this->specialRequirements = $specialRequirements;
+    }
+
+    public function getActorId(): string
+    {
+        return $this->actorId;
     }
 
     public function getName(): string
@@ -44,13 +55,13 @@ class InviteToSpeak
         return $this->email;
     }
 
-    public function getTalks(): array
-    {
-        return $this->talks;
-    }
-
     public function getBio(): Bio
     {
         return $this->bio;
+    }
+
+    public function getSpecialRequirements(): string
+    {
+        return $this->specialRequirements;
     }
 }

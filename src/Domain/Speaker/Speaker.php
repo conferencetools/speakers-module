@@ -8,8 +8,12 @@ use ConferenceTools\Speakers\Domain\Speaker\Command\AddAdditionalTalk;
 use ConferenceTools\Speakers\Domain\Speaker\Command\CancelTalk;
 use ConferenceTools\Speakers\Domain\Speaker\Command\DeclineInvitation;
 use ConferenceTools\Speakers\Domain\Speaker\Command\InviteToSpeak;
+use ConferenceTools\Speakers\Domain\Speaker\Command\ProvideJourneyDetails;
+use ConferenceTools\Speakers\Domain\Speaker\Command\UpdateProfile;
 use ConferenceTools\Speakers\Domain\Speaker\Command\UpdateTalk;
 use ConferenceTools\Speakers\Domain\Speaker\Event\AdditionalTalkWasAdded;
+use ConferenceTools\Speakers\Domain\Speaker\Event\JourneyDetailsProvided;
+use ConferenceTools\Speakers\Domain\Speaker\Event\ProfileWasUpdated;
 use ConferenceTools\Speakers\Domain\Speaker\Event\SpeakerAcceptedInvitation;
 use ConferenceTools\Speakers\Domain\Speaker\Event\SpeakerDeclinedInvitation;
 use ConferenceTools\Speakers\Domain\Speaker\Event\SpeakerWasInvited;
@@ -107,11 +111,21 @@ class Speaker extends AbstractActor
         $this->talks[$event->getTalkId()] = $event->getTalk();
     }
 
+    protected function handleUpdateProfile(UpdateProfile $command)
+    {
+        $this->fire(new ProfileWasUpdated(
+            $command->getActorId(),
+            $command->getName(),
+            $command->getEmail(),
+            $command->getBio(),
+            $command->getSpecialRequirements()
+        ));
+    }
+
     /**
      * @TODO
      *
      * CancelAttendance
-     * UpdateProfile (if linked ticket; update that too?)
      *
      * AccomodationRequest
      * AccomodationBooked
@@ -126,5 +140,11 @@ class Speaker extends AbstractActor
      * SpeakerDinnerRSVP
      *
      * TicketBooked << convert to task? probably not needed inside this actor as info can be pulled into read model from external events
+     * Ticket booking (on accept, update delegate info when info here changes)
      */
+
+    protected function handleProvideJourneyDetails(ProvideJourneyDetails $command)
+    {
+        $this->fire(new JourneyDetailsProvided($this->id(), $command->getJourney()));
+    }
 }

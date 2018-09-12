@@ -5,14 +5,30 @@ namespace ConferenceTools\Speakers\Domain\Speaker\Event;
 use ConferenceTools\Speakers\Domain\Speaker\Bio;
 use ConferenceTools\Speakers\Domain\Speaker\Talk;
 use ConferenceTools\Speakers\Domain\Speaker\Email;
+use JMS\Serializer\Annotation as Jms;
 
 class SpeakerWasInvited
 {
+    /**
+     * @Jms\Type("string")
+     */
     private $identity;
+    /**
+     * @Jms\Type("string")
+     */
     private $name;
-    private $bio;
+    /**
+     * @Jms\Type("ConferenceTools\Speakers\Domain\Speaker\Email")
+     */
     private $email;
+    /**
+     * @Jms\Type("array<ConferenceTools\Speakers\Domain\Speaker\Talk>")
+     */
     private $talks;
+    /**
+     * @Jms\Type("ConferenceTools\Speakers\Domain\Speaker\Bio")
+     */
+    private $bio;
 
     public function __construct(string $identity, string $name, Bio $bio, Email $email, Talk ...$talks)
     {

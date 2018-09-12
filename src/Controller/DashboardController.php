@@ -4,7 +4,9 @@
 namespace ConferenceTools\Speakers\Controller;
 
 
+use ConferenceTools\Speakers\Domain\Dashboard\Entity\Speaker;
 use Zend\View\Model\ViewModel;
+use Doctrine\Common\Collections\Criteria;
 
 class DashboardController extends AppController
 {
@@ -24,6 +26,17 @@ class DashboardController extends AppController
          6) Speakers dinner rsvp and details.
          */
 
-        return new ViewModel();
+        //@TODO needs auth module to pull this out of; otherwise will need to grab from url for a profile action
+        //$speakerId = 'mGyheNGNVD4tOvhCUS0S73QYMghZUA'; //get from auth module.
+        //$speaker = $this->repository(Speaker::class)->get($speakerId);
+        /** @var Speaker $speaker */
+        $speaker = $this->repository(Speaker::class)->matching(new Criteria())->current();
+        $speakerId = $speaker->getIdentity();
+
+        if (!$speaker->hasResponded()) {
+            return $this->redirect()->toRoute('speakers/invitation', ['speakerId' => $speakerId]);
+        }
+
+        return new ViewModel(['speaker' => $speaker]);
     }
 }

@@ -3,11 +3,21 @@
 
 namespace ConferenceTools\Speakers\Domain\Speaker;
 
+use JMS\Serializer\Annotation as Jms;
 
 class Bio
 {
+    /**
+     * @Jms\Type("string")
+     */
     private $aboutMe;
+    /**
+     * @Jms\Type("string")
+     */
     private $twitterHandle;
+    /**
+     * @Jms\Type("string")
+     */
     private $companyName;
 
     public function __construct(string $aboutMe, string $twitterHandle, string $companyName)

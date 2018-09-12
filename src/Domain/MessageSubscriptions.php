@@ -2,6 +2,7 @@
 
 namespace ConferenceTools\Speakers\Domain;
 
+use ConferenceTools\Speakers\Domain\Dashboard\SpeakerProjector;
 use ConferenceTools\Speakers\Domain\Speaker\Command as SpeakerCommand;
 use ConferenceTools\Speakers\Domain\Speaker\Event as SpeakerEvent;
 use ConferenceTools\Speakers\Domain\Task\ClearTaskHandler;
@@ -30,14 +31,30 @@ class MessageSubscriptions
             SpeakerCommand\AddAdditionalTalk::class => [
                 Speaker::class,
             ],
+            SpeakerCommand\UpdateTalk::class => [
+                Speaker::class,
+            ],
+            SpeakerCommand\UpdateProfile::class => [
+                Speaker::class,
+            ],
 
             SpeakerEvent\SpeakerWasInvited::class => [
                 UpdateWebsite::class,
+                SpeakerProjector::class,
             ],
             SpeakerEvent\SpeakerAcceptedInvitation::class => [
                 UpdateWebsite::class,
+                SpeakerProjector::class,
             ],
-            SpeakerEvent\SpeakerDeclinedInvitation::class => [],
+            SpeakerEvent\SpeakerDeclinedInvitation::class => [
+                SpeakerProjector::class,
+            ],
+            SpeakerEvent\ProfileWasUpdated::class => [
+                SpeakerProjector::class,
+            ],
+            SpeakerEvent\TalkWasUpdated::class => [
+                SpeakerProjector::class,
+            ],
             SpeakerEvent\TalkWasCancelled::class => [],
 
             TaskCommand\CompleteTask::class => [

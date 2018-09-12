@@ -1,0 +1,74 @@
+<?php
+/** @var \ConferenceTools\Speakers\Domain\Dashboard\Entity\Speaker $speaker */
+$speaker = $this->speaker
+?>
+<div>
+    <h3>Profile</h3><a href="<?=$this->url('speakers/profile/edit', ['speakerId' => $speaker->getIdentity()])?>">Edit</a>
+    <dl>
+        <dt>Name</dt><dd><?=$speaker->getName()?></dd>
+        <dt>Email</dt><dd><?=$speaker->getEmail()?></dd>
+        <dt>Twitter</dt><dd><?=$speaker->getTwitter()?></dd>
+        <dt>Company</dt><dd><?=$speaker->getCompany()?></dd>
+        <dt>Bio</dt><dd><?=$speaker->getAboutMe()?></dd>
+        <dt>Special requirements</dt><dd><?=$speaker->getSpecialRequirements()?></dd>
+    </dl>
+</div>
+
+<div>
+    <h3>Talks</h3>
+    <table>
+        <thead>
+            <tr><th>Title</th><th>Abstract</th><td></td></tr>
+        </thead>
+        <tbody>
+            <?php foreach ($speaker->getTalks() as $talk): ?>
+                <tr>
+                    <td><?=$talk->getTitle()?></td>
+                    <td><?=$talk->getAbstract()?></td>
+                    <td><a href="<?=$this->url('speakers/talk/edit', ['speakerId' => $speaker->getIdentity(), 'talkId' => $talk->getIndex()])?>">Edit</a></td>
+
+                </tr>
+            <?php endforeach;?>
+        </tbody>
+    </table>
+</div>
+
+<div>
+    <h3>Travel details</h3>
+    <p>Something here which the speaker can edit with their details</p>
+    <p>If appropriate display info on reimbursments and pickups</p>
+    <a>Request travel reimbursement</a>
+    <a>Request station/airport pickup</a>
+</div>
+
+<div>
+    <h3>Accomodation details</h3>
+    <dl>
+        <dt>Accomodation name</dt><dd></dd>
+        <dt>Accomodation address</dt><dd></dd>
+        <dt>Accomodation phone number</dt><dd></dd>
+        <dt>Nights booked</dt><dd></dd>
+    </dl>
+
+    <a>Request booking</a>
+</div>
+
+<div>
+    <h3>Venue information</h3>
+    <dl>
+        <dt>Name</dt><dd></dd>
+        <dt>Address</dt><dd></dd>
+        <dt>Dates</dt><dd></dd>
+    </dl>
+</div>
+
+<div>
+    <h3>Av information</h3>
+    <p>Add information here about AV details</p>
+</div>
+
+<div>
+    <h3>Speaker dinner/activities</h3>
+    <p>Details about said activities</p>
+    <a>RSVP</a>
+</div>
