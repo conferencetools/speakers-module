@@ -65,7 +65,7 @@ return [
                 'options' => [
                     'route' => '/profile/:speakerId',
                     'defaults' => [
-                        'controller' => \ConferenceTools\Speakers\Controller\ProfileController::class,
+                        'controller' => Controller\ProfileController::class,
                     ],
                 ],
                 'child_routes' => [
@@ -80,12 +80,32 @@ return [
                     ],
                 ],
             ],
+            'travel' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/travel/:speakerId',
+                    'defaults' => [
+                        'controller' => Controller\TravelController::class,
+                    ],
+                ],
+                'child_routes' => [
+                    'provide-details' => [
+                        'type' => Segment::class,
+                        'options' => [
+                            'route' => '/provide-details',
+                            'defaults' => [
+                                'action' => 'provide-travel-details'
+                            ],
+                        ],
+                    ],
+                ],
+            ],
             'talk' => [
                 'type' => Segment::class,
                 'options' => [
                     'route' => '/talk/:speakerId',
                     'defaults' => [
-                        'controller' => \ConferenceTools\Speakers\Controller\TalkController::class,
+                        'controller' => Controller\TalkController::class,
                     ],
                 ],
                 'child_routes' => [

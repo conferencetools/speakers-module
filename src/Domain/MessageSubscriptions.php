@@ -37,6 +37,9 @@ class MessageSubscriptions
             SpeakerCommand\UpdateProfile::class => [
                 Speaker::class,
             ],
+            SpeakerCommand\ProvideJourneyDetails::class => [
+                Speaker::class,
+            ],
 
             SpeakerEvent\SpeakerWasInvited::class => [
                 UpdateWebsite::class,
@@ -56,6 +59,9 @@ class MessageSubscriptions
                 SpeakerProjector::class,
             ],
             SpeakerEvent\TalkWasCancelled::class => [],
+            SpeakerEvent\JourneyDetailsProvided::class => [
+                SpeakerProjector::class,
+            ],
 
             TaskCommand\CompleteTask::class => [
                 ClearTaskHandler::class,

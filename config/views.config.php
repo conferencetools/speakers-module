@@ -7,4 +7,5 @@ return [
     'speakers/talk/edit' => $viewDir . 'talk/edit.phtml',
     'speakers/invitation/index' => $viewDir . 'invitation/index.phtml',
     'speakers/profile/edit' => $viewDir . 'profile/edit.phtml',
+    'speakers/travel/provide-travel-details' => $viewDir . 'travel/provide-travel-details.phtml',
 ];

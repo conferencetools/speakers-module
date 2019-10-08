@@ -35,7 +35,25 @@ $speaker = $this->speaker
 
 <div>
     <h3>Travel details</h3>
-    <p>Something here which the speaker can edit with their details</p>
+    <p>You can use this area to record your travel details to and from the event. Supply as much or as little detail as you wish.</p>
+    <table>
+        <thead>
+        <tr><th>Depart From</th><th>Departure Time</th><th>Arrive At</th><th>Arrival Time</th><th>Notes</th></tr>
+        </thead>
+        <tbody>
+        <?php foreach ($speaker->getJourneys() as $journey): ?>
+            <tr>
+                <td><?=$journey->getDepartFrom()?></td>
+                <td><?=$journey->getDepartureTime()->format('Y-m-d h:i')?></td>
+                <td><?=$journey->getArriveAt()?></td>
+                <td><?=$journey->getArrivalTime()->format('Y-m-d h:i')?></td>
+                <td><?=$journey->getNotes()?></td>
+            </tr>
+        <?php endforeach;?>
+        </tbody>
+    </table>
+    <a href="<?=$this->url('speakers/travel/provide-details', ['speakerId' => $speaker->getIdentity()])?>">Provide travel details</a>
+
     <p>If appropriate display info on reimbursments and pickups</p>
     <a>Request travel reimbursement</a>
     <a>Request station/airport pickup</a>

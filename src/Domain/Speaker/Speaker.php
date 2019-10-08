@@ -27,6 +27,7 @@ class Speaker extends AbstractActor
     private $talks;
     private $bio;
     private $accepted;
+    private $journeys;
 
     protected function handleInviteToSpeak(InviteToSpeak $command)
     {
@@ -124,7 +125,7 @@ class Speaker extends AbstractActor
 
     /**
      * @TODO
-     *
+     * Add talk type as a string description (not editable)
      * CancelAttendance
      *
      * AccomodationRequest
@@ -146,5 +147,10 @@ class Speaker extends AbstractActor
     protected function handleProvideJourneyDetails(ProvideJourneyDetails $command)
     {
         $this->fire(new JourneyDetailsProvided($this->id(), $command->getJourney()));
+    }
+
+    protected function applyJourneyDetailsProvided(JourneyDetailsProvided $event)
+    {
+        $this->journeys[] = $event->getJourney();
     }
 }

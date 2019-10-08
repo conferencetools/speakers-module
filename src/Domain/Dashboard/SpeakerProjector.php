@@ -6,6 +6,7 @@ use Carnage\Phactor\Message\DomainMessage;
 use Carnage\Phactor\Message\Handler;
 use Carnage\Phactor\ReadModel\Repository;
 use ConferenceTools\Speakers\Domain\Dashboard\Entity\Speaker;
+use ConferenceTools\Speakers\Domain\Speaker\Event\JourneyDetailsProvided;
 use ConferenceTools\Speakers\Domain\Speaker\Event\ProfileWasUpdated;
 use ConferenceTools\Speakers\Domain\Speaker\Event\SpeakerAcceptedInvitation;
 use ConferenceTools\Speakers\Domain\Speaker\Event\SpeakerWasInvited;
@@ -35,6 +36,10 @@ class SpeakerProjector implements Handler
                 break;
             case $message instanceof ProfileWasUpdated:
                 $this->updateProfile($message);
+                break;
+            case $message instanceof JourneyDetailsProvided:
+                $this->addJourney($message);
+                break;
         }
 
         $this->repository->commit();
@@ -69,5 +74,12 @@ class SpeakerProjector implements Handler
         /** @var Speaker $speaker */
         $speaker = $this->repository->get($message->getId());
         $speaker->updateProfile($message->getName(), $message->getEmail(), $message->getBio(), $message->getSpecialRequirements());
+    }
+
+    private function addJourney(JourneyDetailsProvided $message)
+    {
+        /** @var Speaker $speaker */
+        $speaker = $this->repository->get($message->getId());
+        $speaker->addJourney($message->getJourney());
     }
 }
