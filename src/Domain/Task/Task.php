@@ -4,7 +4,7 @@
 namespace ConferenceTools\Speakers\Domain\Task;
 
 
-use Carnage\Phactor\Actor\AbstractActor;
+use Phactor\Actor\AbstractActor;
 use ConferenceTools\Speakers\Domain\Task\Command\CompleteTask;
 use ConferenceTools\Speakers\Domain\Task\Event\TaskCompleted;
 use ConferenceTools\Speakers\Domain\Task\Event\TaskRaised;

@@ -4,9 +4,12 @@
   "minimum-stability": "dev",
   "license": "MIT",
   "require": {
+    "php": "^7.2",
     "zendframework/zend-mvc": "^3.0.1",
     "zendframework/zend-form": "^2.12",
-    "zendframework/zend-i18n": "^2.9@dev"
+    "zendframework/zend-i18n": "^2.9@dev",
+    "phactor/phactor": "dev-master",
+    "ext-json": "*"
   },
   "autoload": {
     "psr-4": {

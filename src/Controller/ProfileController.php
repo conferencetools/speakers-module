@@ -36,7 +36,7 @@ class ProfileController extends AppController
         $form->add(new Text('twitter', ['label' => 'Twitter']));
         $form->add(new Textarea('aboutMe', ['label' => 'About You']));
         $form->add(new Textarea('specialRequirements', ['label' => 'Special Requirements (dietary needs etc)']));
-        $form->add(new Submit('submit', ['value' => 'Edit']));
+        $form->add(new Submit('submit', ['label' => 'Edit']));
         $form->setData($data);
 
         if ($this->getRequest()->isPost()) {
@@ -60,6 +60,8 @@ class ProfileController extends AppController
             }
         }
 
-        return new ViewModel(['form' => $form]);
+        $viewModel = new ViewModel(['form' => $form, 'action' => 'Edit Profile']);
+        $viewModel->setTemplate('admin/form');
+        return $viewModel;
     }
 }

@@ -8,6 +8,11 @@ use Zend\Router\Http\Segment;
 return [
     'speakers' => [
         'type' => Placeholder::class,
+        'options' => [
+            'defaults' => [
+                'layout' => 'admin/layout',
+            ]
+        ],
         'child_routes' => [
             'redirect' => [
                 'type' => Literal::class,

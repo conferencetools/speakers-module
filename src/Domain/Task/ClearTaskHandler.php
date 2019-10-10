@@ -4,10 +4,10 @@
 namespace ConferenceTools\Speakers\Domain\Task;
 
 
-use Carnage\Phactor\Message\ActorIdentity;
-use Carnage\Phactor\Message\DomainMessage;
-use Carnage\Phactor\Message\Handler;
-use Carnage\Phactor\Persistence\ActorRepository;
+use Phactor\Message\ActorIdentity;
+use Phactor\Message\DomainMessage;
+use Phactor\Message\Handler;
+use Phactor\Persistence\ActorRepository;
 use ConferenceTools\Speakers\Domain\Task\Command\CompleteTask;
 
 class ClearTaskHandler implements Handler

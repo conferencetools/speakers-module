@@ -2,91 +2,190 @@
 /** @var \ConferenceTools\Speakers\Domain\Dashboard\Entity\Speaker $speaker */
 $speaker = $this->speaker
 ?>
-<div>
-    <h3>Profile</h3><a href="<?=$this->url('speakers/profile/edit', ['speakerId' => $speaker->getIdentity()])?>">Edit</a>
-    <dl>
-        <dt>Name</dt><dd><?=$speaker->getName()?></dd>
-        <dt>Email</dt><dd><?=$speaker->getEmail()?></dd>
-        <dt>Twitter</dt><dd><?=$speaker->getTwitter()?></dd>
-        <dt>Company</dt><dd><?=$speaker->getCompany()?></dd>
-        <dt>Bio</dt><dd><?=$speaker->getAboutMe()?></dd>
-        <dt>Special requirements</dt><dd><?=$speaker->getSpecialRequirements()?></dd>
-    </dl>
+<div class="row">
+    <div class="col-md-6">
+        <div class="card spur-card">
+            <div class="card-header">
+                <div class="spur-card-icon">
+                    <i class="fas fa-table"></i>
+                </div>
+                <div class="spur-card-title">Speaker Profile</div>
+            </div>
+            <div class="card-body ">
+                <a href="<?=$this->url('speakers/profile/edit', ['speakerId' => $speaker->getIdentity()])?>">Edit</a>
+                <dl>
+                    <dt>Name</dt><dd><?=$speaker->getName()?></dd>
+                    <dt>Email</dt><dd><?=$speaker->getEmail()?></dd>
+                    <dt>Twitter</dt><dd><?=$speaker->getTwitter()?></dd>
+                    <dt>Company</dt><dd><?=$speaker->getCompany()?></dd>
+                    <dt>Bio</dt><dd><?=$speaker->getAboutMe()?></dd>
+                    <dt>Special requirements</dt><dd><?=$speaker->getSpecialRequirements()?></dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card spur-card">
+            <div class="card-header">
+                <div class="spur-card-icon">
+                    <i class="fas fa-table"></i>
+                </div>
+                <div class="spur-card-title">Talks</div>
+            </div>
+            <div class="card-body ">
+                <table class="table table-in-card">
+                    <thead>
+                    <tr><th>Title</th><th>Abstract</th><th></th></tr>
+                    </thead>
+                    <tbody>
+                    <?php foreach ($speaker->getTalks() as $talk): ?>
+                        <tr>
+                            <td><?=$talk->getTitle()?></td>
+                            <td><?=$talk->getAbstract()?></td>
+                            <td><a href="<?=$this->url('speakers/talk/edit', ['speakerId' => $speaker->getIdentity(), 'talkId' => $talk->getIndex()])?>">Edit</a></td>
+
+                        </tr>
+                    <?php endforeach;?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 
-<div>
-    <h3>Talks</h3>
-    <table>
-        <thead>
-            <tr><th>Title</th><th>Abstract</th><td></td></tr>
-        </thead>
-        <tbody>
-            <?php foreach ($speaker->getTalks() as $talk): ?>
-                <tr>
-                    <td><?=$talk->getTitle()?></td>
-                    <td><?=$talk->getAbstract()?></td>
-                    <td><a href="<?=$this->url('speakers/talk/edit', ['speakerId' => $speaker->getIdentity(), 'talkId' => $talk->getIndex()])?>">Edit</a></td>
-
-                </tr>
-            <?php endforeach;?>
-        </tbody>
-    </table>
+<div class="row">
+<div class="col-md-12">
+    <div class="card spur-card">
+        <div class="card-header">
+            <div class="spur-card-icon">
+                <i class="fas fa-table"></i>
+            </div>
+            <div class="spur-card-title">Travel Details</div>
+        </div>
+        <div class="card-body ">
+            <p>You can use this area to record your travel details to and from the event. Supply as much or as little detail as you wish.</p>
+            <table class="table table-in-card">
+                <thead>
+                <tr><th>Depart From</th><th>Departure Time</th><th>Arrive At</th><th>Arrival Time</th><th>Notes</th></tr>
+                </thead>
+                <tbody>
+                <?php foreach ($speaker->getJourneys() as $journey): ?>
+                    <tr>
+                        <td><?=$journey->getDepartFrom()?></td>
+                        <td><?=$journey->getDepartureTime()->format('Y-m-d h:i')?></td>
+                        <td><?=$journey->getArriveAt()?></td>
+                        <td><?=$journey->getArrivalTime()->format('Y-m-d h:i')?></td>
+                        <td><?=$journey->getNotes()?></td>
+                    </tr>
+                <?php endforeach;?>
+                </tbody>
+            </table>
+            <a href="<?=$this->url('speakers/travel/provide-details', ['speakerId' => $speaker->getIdentity()])?>">Provide travel details</a>
+        </div>
+    </div>
+</div>
 </div>
 
-<div>
-    <h3>Travel details</h3>
-    <p>You can use this area to record your travel details to and from the event. Supply as much or as little detail as you wish.</p>
-    <table>
-        <thead>
-        <tr><th>Depart From</th><th>Departure Time</th><th>Arrive At</th><th>Arrival Time</th><th>Notes</th></tr>
-        </thead>
-        <tbody>
-        <?php foreach ($speaker->getJourneys() as $journey): ?>
-            <tr>
-                <td><?=$journey->getDepartFrom()?></td>
-                <td><?=$journey->getDepartureTime()->format('Y-m-d h:i')?></td>
-                <td><?=$journey->getArriveAt()?></td>
-                <td><?=$journey->getArrivalTime()->format('Y-m-d h:i')?></td>
-                <td><?=$journey->getNotes()?></td>
-            </tr>
-        <?php endforeach;?>
-        </tbody>
-    </table>
-    <a href="<?=$this->url('speakers/travel/provide-details', ['speakerId' => $speaker->getIdentity()])?>">Provide travel details</a>
-
-    <p>If appropriate display info on reimbursments and pickups</p>
-    <a>Request travel reimbursement</a>
-    <a>Request station/airport pickup</a>
+<div class="row">
+    <div class="col-md-6">
+        <div class="card spur-card">
+            <div class="card-header">
+                <div class="spur-card-icon">
+                    <i class="fas fa-table"></i>
+                </div>
+                <div class="spur-card-title">Travel Reimbursement</div>
+            </div>
+            <div class="card-body ">
+                <p>Display info on reimbursments</p>
+                <a>Request travel reimbursement</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card spur-card">
+            <div class="card-header">
+                <div class="spur-card-icon">
+                    <i class="fas fa-table"></i>
+                </div>
+                <div class="spur-card-title">Station pickups</div>
+            </div>
+            <div class="card-body ">
+                <p>Display info on station/airport pickups</p>
+                <a>Request station/airport pickup</a>
+            </div>
+        </div>
+    </div>
 </div>
 
-<div>
-    <h3>Accomodation details</h3>
-    <dl>
-        <dt>Accomodation name</dt><dd></dd>
-        <dt>Accomodation address</dt><dd></dd>
-        <dt>Accomodation phone number</dt><dd></dd>
-        <dt>Nights booked</dt><dd></dd>
-    </dl>
+<div class="row">
+    <div class="col-md-6">
+        <div class="card spur-card">
+            <div class="card-header">
+                <div class="spur-card-icon">
+                    <i class="fas fa-table"></i>
+                </div>
+                <div class="spur-card-title">Accommodation details</div>
+            </div>
+            <div class="card-body ">
+                <dl>
+                    <dt>Accommodation name</dt><dd></dd>
+                    <dt>Accommodation address</dt><dd></dd>
+                    <dt>Accommodation phone number</dt><dd></dd>
+                    <dt>Nights booked</dt><dd></dd>
+                </dl>
 
-    <a>Request booking</a>
+                <a>Request booking</a>
+            </div>
+        </div>
+    </div>
 </div>
 
-<div>
-    <h3>Venue information</h3>
-    <dl>
-        <dt>Name</dt><dd></dd>
-        <dt>Address</dt><dd></dd>
-        <dt>Dates</dt><dd></dd>
-    </dl>
+<div class="row">
+    <div class="col-md-6">
+        <div class="card spur-card">
+            <div class="card-header">
+                <div class="spur-card-icon">
+                    <i class="fas fa-table"></i>
+                </div>
+                <div class="spur-card-title">Venue information</div>
+            </div>
+            <div class="card-body ">
+                <dl>
+                    <dt>Name</dt><dd></dd>
+                    <dt>Address</dt><dd></dd>
+                    <dt>Dates</dt><dd></dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card spur-card">
+            <div class="card-header">
+                <div class="spur-card-icon">
+                    <i class="fas fa-table"></i>
+                </div>
+                <div class="spur-card-title">Av information</div>
+            </div>
+            <div class="card-body ">
+                <p>Add information here about AV details</p>
+            </div>
+        </div>
+    </div>
 </div>
 
-<div>
-    <h3>Av information</h3>
-    <p>Add information here about AV details</p>
-</div>
-
-<div>
-    <h3>Speaker dinner/activities</h3>
-    <p>Details about said activities</p>
-    <a>RSVP</a>
+<div class="row">
+    <div class="col-md-6">
+        <div class="card spur-card">
+            <div class="card-header">
+                <div class="spur-card-icon">
+                    <i class="fas fa-table"></i>
+                </div>
+                <div class="spur-card-title">Speaker dinner/activities</div>
+            </div>
+            <div class="card-body ">
+                <p>Details about said activities</p>
+                <a>RSVP</a>
+            </div>
+        </div>
+    </div>
 </div>

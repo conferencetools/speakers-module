@@ -3,7 +3,7 @@
 
 namespace ConferenceTools\Speakers\Domain\Speaker\Command;
 
-use Carnage\Phactor\Message\HasActorId;
+use Phactor\Message\HasActorId;
 use ConferenceTools\Speakers\Domain\Speaker\Journey;
 use JMS\Serializer\Annotation as Jms;
 

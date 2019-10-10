@@ -2,9 +2,9 @@
 
 namespace ConferenceTools\Speakers\Domain\Dashboard;
 
-use Carnage\Phactor\Message\DomainMessage;
-use Carnage\Phactor\Message\Handler;
-use Carnage\Phactor\ReadModel\Repository;
+use Phactor\Message\DomainMessage;
+use Phactor\Message\Handler;
+use Phactor\ReadModel\Repository;
 use ConferenceTools\Speakers\Domain\Dashboard\Entity\Speaker;
 use ConferenceTools\Speakers\Domain\Speaker\Event\JourneyDetailsProvided;
 use ConferenceTools\Speakers\Domain\Speaker\Event\ProfileWasUpdated;

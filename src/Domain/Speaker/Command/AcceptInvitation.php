@@ -2,7 +2,7 @@
 
 namespace ConferenceTools\Speakers\Domain\Speaker\Command;
 
-use Carnage\Phactor\Message\HasActorId;
+use Phactor\Message\HasActorId;
 use JMS\Serializer\Annotation as Jms;
 
 class AcceptInvitation implements HasActorId

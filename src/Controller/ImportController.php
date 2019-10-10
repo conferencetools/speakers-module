@@ -19,8 +19,8 @@ class ImportController extends AppController
         //@TODO add form validation
 
         $form = new Form();
-        $form->add(new File('upload'));
-        $form->add(new Submit('submit'));
+        $form->add(new File('upload', ['label' => 'Speakers json file']));
+        $form->add(new Submit('submit', ['label' => 'Upload']));
 
         if ($this->getRequest()->isPost()) {
             $form->setData(\array_merge($this->params()->fromFiles(), $this->params()->fromPost()));

@@ -6,6 +6,8 @@ namespace ConferenceTools\Speakers\Controller;
 
 use ConferenceTools\Speakers\Domain\Speaker\Command\ProvideJourneyDetails;
 use ConferenceTools\Speakers\Domain\Speaker\Journey;
+use ConferenceTools\Speakers\Form\ProvideTravelDetails;
+use Zend\Form\Element\DateTime;
 use Zend\Form\Element\Submit;
 use Zend\Form\Element\Text;
 use Zend\Form\Element\Textarea;
@@ -20,13 +22,7 @@ class TravelController extends AppController
         /** @var Speaker $speaker */
 
         //@TODO validate + format dates
-        $form = new Form();
-        $form->add(new Text('departFrom', ['label' => 'Depart from']));
-        $form->add(new Text('departureTime', ['label' => 'Departure time']));
-        $form->add(new Text('arriveAt', ['label' => 'Arrive at']));
-        $form->add(new Text('arrivalTime', ['label' => 'Arrival time']));
-        $form->add(new Textarea('notes', ['label' => 'Notes']));
-        $form->add(new Submit('submit', ['value' => 'Edit']));
+        $form = $this->form(ProvideTravelDetails::class);
 
         if ($this->getRequest()->isPost()) {
             $data = $this->params()->fromPost();
@@ -39,8 +35,8 @@ class TravelController extends AppController
                     new Journey(
                         $data['arriveAt'],
                         $data['departFrom'],
-                        \DateTime::createFromFormat('Y-m-d h:i', $data['arrivalTime']),
-                        \DateTime::createFromFormat('Y-m-d h:i', $data['departureTime']),
+                        new \DateTime($data['arrivalTime']),
+                        new \DateTime($data['departureTime']),
                         $data['notes']
                     )
                 );
@@ -52,6 +48,8 @@ class TravelController extends AppController
             }
         }
 
-        return new ViewModel(['form' => $form]);
+        $viewModel = new ViewModel(['form' => $form, 'action' => 'Provide travel details']);
+        $viewModel->setTemplate('admin/form');
+        return $viewModel;
     }
 }

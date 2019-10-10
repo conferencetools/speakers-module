@@ -73,7 +73,7 @@ class TalkController extends AppController
         $form = new Form();
         $form->add(new Text('title', ['label' => 'Title']));
         $form->add(new Textarea('abstract', ['label' => 'Abstract']));
-        $form->add(new Submit('submit', ['value' => 'Edit']));
+        $form->add(new Submit('submit', ['label' => 'Edit']));
         $form->setData($data);
 
         $speakerId = $this->params()->fromRoute('speakerId');
@@ -94,6 +94,8 @@ class TalkController extends AppController
             }
         }
 
-        return new ViewModel(['form' => $form]);
+        $viewModel = new ViewModel(['form' => $form, 'action' => 'Edit Talk']);
+        $viewModel->setTemplate('admin/form');
+        return $viewModel;
     }
 }

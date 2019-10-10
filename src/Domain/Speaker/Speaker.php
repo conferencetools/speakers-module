@@ -2,7 +2,7 @@
 
 namespace ConferenceTools\Speakers\Domain\Speaker;
 
-use Carnage\Phactor\Actor\AbstractActor;
+use Phactor\Actor\AbstractActor;
 use ConferenceTools\Speakers\Domain\Speaker\Command\AcceptInvitation;
 use ConferenceTools\Speakers\Domain\Speaker\Command\AddAdditionalTalk;
 use ConferenceTools\Speakers\Domain\Speaker\Command\CancelTalk;

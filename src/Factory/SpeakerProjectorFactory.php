@@ -2,7 +2,7 @@
 
 namespace ConferenceTools\Speakers\Factory;
 
-use Carnage\Phactor\Zend\RepositoryManager;
+use Phactor\Zend\RepositoryManager;
 use ConferenceTools\Speakers\Domain\Dashboard\Entity\Speaker;
 use ConferenceTools\Speakers\Domain\Dashboard\SpeakerProjector;
 use Interop\Container\ContainerInterface;
