@@ -2,31 +2,47 @@
 /** @var \ConferenceTools\Speakers\Domain\Dashboard\Entity\Speaker $speaker */
 $speaker = $this->speaker
 ?>
-<p>
-    Thank you for submitting to our call for papers, <?= $speaker->getName()?> we would like to extend an invitation
-    to you for the following talks:
-</p>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card spur-card">
+            <div class="card-header">
+                <div class="spur-card-icon">
+                    <i class="fas fa-table"></i>
+                </div>
+                <div class="spur-card-title">Speaker Invitation</div>
+            </div>
+            <div class="card-body ">
+                <p>
+                    Thank you for submitting to our call for papers, <?= $speaker->getName()?> we would like to extend an invitation
+                    to you for the following talks:
+                </p>
 
-<table>
-    <thead>
-    <tr><th>Title</th><th>Abstract</th></tr>
-    </thead>
-    <tbody>
-    <?php foreach ($speaker->getTalks() as $talk): ?>
-        <tr>
-            <td><?=$talk->getTitle()?></td>
-            <td><?=$talk->getAbstract()?></td>
-        </tr>
-    <?php endforeach;?>
-    </tbody>
-</table>
+                <table class="table table-in-card">
+                    <thead>
+                    <tr><th>Title</th><th>Abstract</th></tr>
+                    </thead>
+                    <tbody>
+                    <?php foreach ($speaker->getTalks() as $talk): ?>
+                        <tr>
+                            <td><?=$talk->getTitle()?></td>
+                            <td><?=$talk->getAbstract()?></td>
+                        </tr>
+                    <?php endforeach;?>
+                    </tbody>
+                </table>
+                <p></p>
+                <p>
+                    <small>
+                    Please use the buttons below to accept or decline this invitation, if you have been accepted for multiple talks and
+                    wish to only give one, please email us and let us know and we'll amend this invitation with the correct talks. If
+                    there are any changes or corrections you wish to make to your talk or bio, you will have the opportunity to do so
+                    once you have accepted the invitation.
+                    </small>
+                </p>
 
-<p>
-    Please use the buttons below to accept or decline this invitation, if you have been accepted for multiple talks and
-    wish to only give one, please email us and let us know and we'll amend this invitation with the correct talks. If
-    there are any changes or corrections you wish to make to your talk or bio, you will have the opportunity to do so
-    once you have accepted the invitation.
-</p>
-
-<a href="<?=$this->url('speakers/invitation/accept', [], [], true) ?>" />Accept</a>
-<a href="<?=$this->url('speakers/invitation/decline', [], [], true) ?>" />Decline</a>
+                <a class="btn btn-success" href="<?=$this->url('speakers/invitation/accept', [], [], true) ?>" />Accept</a>
+                <a class="btn btn-danger" href="<?=$this->url('speakers/invitation/decline', [], [], true) ?>" />Decline</a>
+            </div>
+        </div>
+    </div>
+</div>

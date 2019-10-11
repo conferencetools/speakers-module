@@ -12,7 +12,6 @@ $speaker = $this->speaker
                 <div class="spur-card-title">Speaker Profile</div>
             </div>
             <div class="card-body ">
-                <a href="<?=$this->url('speakers/profile/edit', ['speakerId' => $speaker->getIdentity()])?>">Edit</a>
                 <dl>
                     <dt>Name</dt><dd><?=$speaker->getName()?></dd>
                     <dt>Email</dt><dd><?=$speaker->getEmail()?></dd>
@@ -21,6 +20,7 @@ $speaker = $this->speaker
                     <dt>Bio</dt><dd><?=$speaker->getAboutMe()?></dd>
                     <dt>Special requirements</dt><dd><?=$speaker->getSpecialRequirements()?></dd>
                 </dl>
+                <a class="btn btn-primary" href="<?=$this->url('speakers/edit-profile')?>">Edit</a>
             </div>
         </div>
     </div>
@@ -42,7 +42,7 @@ $speaker = $this->speaker
                         <tr>
                             <td><?=$talk->getTitle()?></td>
                             <td><?=$talk->getAbstract()?></td>
-                            <td><a href="<?=$this->url('speakers/talk/edit', ['speakerId' => $speaker->getIdentity(), 'talkId' => $talk->getIndex()])?>">Edit</a></td>
+                            <td><a class="btn btn-primary" href="<?=$this->url('speakers/edit-talk', ['talkId' => $talk->getIndex()])?>">Edit</a></td>
 
                         </tr>
                     <?php endforeach;?>
@@ -80,7 +80,7 @@ $speaker = $this->speaker
                 <?php endforeach;?>
                 </tbody>
             </table>
-            <a href="<?=$this->url('speakers/travel/provide-details', ['speakerId' => $speaker->getIdentity()])?>">Provide travel details</a>
+            <a class="btn btn-primary mt-4" href="<?=$this->url('speakers/travel/provide-details', ['speakerId' => $speaker->getIdentity()])?>">Provide travel details</a>
         </div>
     </div>
 </div>

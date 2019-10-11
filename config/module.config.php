@@ -1,7 +1,18 @@
 <?php
 
 return [
+    'auth' => [
+        'permissions' => [
+            'speaker' => 'Can edit own speaker info',
+
+        ]
+    ],
     'controllers' => require __DIR__ . '/controllers.config.php',
+    'controller_plugins' => [
+        'invokables' => [
+            'currentSpeaker' => \ConferenceTools\Speakers\Mvc\Controller\Plugin\CurrentSpeaker::class,
+        ],
+    ],
     'doctrine' => require __DIR__ . '/doctrine.config.php',
     'message_handlers' => require __DIR__ . '/message_handlers.config.php',
     'message_subscriptions' => \ConferenceTools\Speakers\Domain\MessageSubscriptions::getSubscriptions(),

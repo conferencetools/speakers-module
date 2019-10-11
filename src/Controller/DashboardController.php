@@ -26,11 +26,9 @@ class DashboardController extends AppController
          6) Speakers dinner rsvp and details.
          */
 
-        //@TODO needs auth module to pull this out of; otherwise will need to grab from url for a profile action
-        //$speakerId = 'mGyheNGNVD4tOvhCUS0S73QYMghZUA'; //get from auth module.
-        //$speaker = $this->repository(Speaker::class)->get($speakerId);
         /** @var Speaker $speaker */
-        $speaker = $this->repository(Speaker::class)->matching(new Criteria())->current();
+        $criteria = Criteria::create()->where(Criteria::expr()->eq('email', $this->identity()->getIdentifier()));
+        $speaker = $this->repository(Speaker::class)->matching($criteria)->current();
         $speakerId = $speaker->getIdentity();
 
         if (!$speaker->hasResponded()) {

@@ -1,7 +1,11 @@
 <?php
 
-namespace ConferenceTools\Speakers\Controller;
+namespace ConferenceTools\Speakers\Controller\Admin;
 
+use ConferenceTools\Authentication\Domain\User\Command\ChangeUserPermissions;
+use ConferenceTools\Authentication\Domain\User\Command\CreateNewUser;
+use ConferenceTools\Authentication\Domain\User\HashedPassword;
+use ConferenceTools\Speakers\Controller\AppController;
 use ConferenceTools\Speakers\Domain\Speaker\Bio;
 use ConferenceTools\Speakers\Domain\Speaker\Command\InviteToSpeak;
 use ConferenceTools\Speakers\Domain\Speaker\Email;
@@ -30,12 +34,13 @@ class ImportController extends AppController
             }
         }
 
-        return new ViewModel(['form' => $form]);
+        $viewModel = new ViewModel(['form' => $form]);
+        $viewModel->setTemplate('admin/form');
+        return $viewModel;
     }
 
     /**
      * @todo Needs to handle issues with parsing json
-     * @TODO refactor into service class
      * @TODO allow csv uploads as well
      */
     private function importFile($file): void
@@ -45,13 +50,24 @@ class ImportController extends AppController
         $speakerData = \json_decode($fileData, true);
 
         foreach ($speakerData AS $speaker) {
-            //@TODO fire command to create user account
+
+            $command = new CreateNewUser(
+                $speaker['email'],
+                new HashedPassword('Password1') //@TODO generate randomly and email to speaker later
+            );
+
+            $this->messageBus()->fire($command);
+
+            $command = new ChangeUserPermissions($speaker['email'], ['speaker']);
+
+            $this->messageBus()->fire($command);
 
             $talks = [];
             foreach ($speaker['talks'] as $talk) {
                 $talks[] = new Talk($talk['title'], $talk['abstract']);
             }
-            $events = $this->messageBus()->fire(
+
+            $this->messageBus()->fire(
                 new InviteToSpeak(
                     $speaker['name'],
                     new Bio($speaker['profile'], $speaker['twitter'], $speaker['company']),

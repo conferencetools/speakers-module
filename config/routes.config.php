@@ -11,6 +11,7 @@ return [
         'options' => [
             'defaults' => [
                 'layout' => 'admin/layout',
+                'requiresAuth' => true,
             ]
         ],
         'child_routes' => [
@@ -29,7 +30,7 @@ return [
                 'options' => [
                     'route' => '/import',
                     'defaults' => [
-                        'controller' => Controller\ImportController::class,
+                        'controller' => Controller\Admin\ImportController::class,
                         'action' => 'index',
                     ],
                 ]
@@ -65,23 +66,23 @@ return [
                     ],
                 ],
             ],
-            'profile' => [
+            'edit-profile' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/profile/:speakerId',
+                    'route' => '/edit-profile',
                     'defaults' => [
                         'controller' => Controller\ProfileController::class,
+                        'action' => 'edit'
                     ],
                 ],
-                'child_routes' => [
-                    'edit' => [
-                        'type' => Segment::class,
-                        'options' => [
-                            'route' => '/edit',
-                            'defaults' => [
-                                'action' => 'edit'
-                            ],
-                        ],
+            ],
+            'edit-talk' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/edit-talk/:talkId',
+                    'defaults' => [
+                        'controller' => Controller\TalkController::class,
+                        'action' => 'edit'
                     ],
                 ],
             ],
