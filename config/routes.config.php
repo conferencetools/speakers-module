@@ -38,7 +38,7 @@ return [
             'invitation' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/invitation/:speakerId',
+                    'route' => '/invitation',
                     'defaults' => [
                         'controller' => Controller\InvitationController::class,
                         'action' => 'index',
@@ -106,12 +106,58 @@ return [
                     ],
                 ],
             ],
+
+            'dashboard' => [
+                'type' => Literal::class,
+                'options' => [
+                    'route' => '/dashboard',
+                    'defaults' => [
+                        'controller' => Controller\DashboardController::class,
+                        'action' => 'index',
+                    ]
+                ]
+            ],
+
+            // Admin routes
+
+            'speakers' => [
+                'type' => Literal::class,
+                'options' => [
+                    'route' => '/speakers',
+                    'defaults' => [
+                        'action' => 'index',
+                        'controller' => Controller\Admin\SpeakerController::class,
+                    ],
+                ],
+            ],
+            'speaker' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/speaker/:speakerId',
+                    'defaults' => [
+                        'action' => 'profile',
+                        'controller' => Controller\Admin\SpeakerController::class,
+                    ],
+                ],
+                'may_terminate' => true,
+                'child_routes' => [
+                    'edit' => [
+                        'type' => Literal::class,
+                        'options' => [
+                            'route' => '/edit',
+                            'defaults' => [
+                                'action' => 'edit',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
             'talk' => [
                 'type' => Segment::class,
                 'options' => [
                     'route' => '/talk/:speakerId',
                     'defaults' => [
-                        'controller' => Controller\TalkController::class,
+                        'controller' => Controller\Admin\TalkController::class,
                     ],
                 ],
                 'child_routes' => [
@@ -144,16 +190,6 @@ return [
                     ],
                 ]
             ],
-            'dashboard' => [
-                'type' => Literal::class,
-                'options' => [
-                    'route' => '/dashboard',
-                    'defaults' => [
-                        'controller' => Controller\DashboardController::class,
-                        'action' => 'index',
-                    ]
-                ]
-            ]
         ]
     ]
 ];

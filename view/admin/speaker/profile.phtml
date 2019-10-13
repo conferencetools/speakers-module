@@ -22,7 +22,7 @@ $speaker = $this->speaker
                     <dt>Allergies</dt><dd><?=$speaker->getAllergies()?></dd>
                     <dt>Accessibility requirements</dt><dd><?=$speaker->getSpecialRequirements()?></dd>
                 </dl>
-                <a class="btn btn-primary" href="<?=$this->url('speakers/edit-profile')?>">Edit</a>
+                <a class="btn btn-primary" href="<?=$this->url('speakers/speaker/edit', ['speakerId' => $speaker->getIdentity()])?>">Edit</a>
             </div>
         </div>
     </div>
@@ -44,8 +44,10 @@ $speaker = $this->speaker
                         <tr>
                             <td><?=$talk->getTitle()?></td>
                             <td><?=$talk->getAbstract()?></td>
-                            <td><a class="btn btn-primary" href="<?=$this->url('speakers/edit-talk', ['talkId' => $talk->getIndex()])?>">Edit</a></td>
-
+                            <td>
+                                <a class="btn btn-primary" href="<?=$this->url('speakers/talk/edit', ['talkId' => $talk->getIndex(), 'speakerId' => $speaker->getIdentity()])?>">Edit</a>
+                                <a class="btn btn-danger" href="<?=$this->url('speakers/talk/cancel', ['talkId' => $talk->getIndex(), 'speakerId' => $speaker->getIdentity()])?>">Cancel</a>
+                            </td>
                         </tr>
                     <?php endforeach;?>
                     </tbody>
@@ -53,39 +55,6 @@ $speaker = $this->speaker
             </div>
         </div>
     </div>
-</div>
-
-<div class="row">
-<div class="col-md-12">
-    <div class="card spur-card">
-        <div class="card-header">
-            <div class="spur-card-icon">
-                <i class="fas fa-table"></i>
-            </div>
-            <div class="spur-card-title">Travel Details</div>
-        </div>
-        <div class="card-body ">
-            <p>You can use this area to record your travel details to and from the event. Supply as much or as little detail as you wish.</p>
-            <table class="table table-in-card">
-                <thead>
-                <tr><th>Depart From</th><th>Departure Time</th><th>Arrive At</th><th>Arrival Time</th><th>Notes</th></tr>
-                </thead>
-                <tbody>
-                <?php foreach ($speaker->getJourneys() as $journey): ?>
-                    <tr>
-                        <td><?=$journey->getDepartFrom()?></td>
-                        <td><?=$journey->getDepartureTime()->format('Y-m-d h:i')?></td>
-                        <td><?=$journey->getArriveAt()?></td>
-                        <td><?=$journey->getArrivalTime()->format('Y-m-d h:i')?></td>
-                        <td><?=$journey->getNotes()?></td>
-                    </tr>
-                <?php endforeach;?>
-                </tbody>
-            </table>
-            <a class="btn btn-primary mt-4" href="<?=$this->url('speakers/travel/provide-details', ['speakerId' => $speaker->getIdentity()])?>">Provide travel details</a>
-        </div>
-    </div>
-</div>
 </div>
 
 <div class="row">
@@ -129,53 +98,11 @@ $speaker = $this->speaker
                 <div class="spur-card-title">Accommodation details</div>
             </div>
             <div class="card-body ">
-                <dl>
-                    <dt>Accommodation name</dt><dd></dd>
-                    <dt>Accommodation address</dt><dd></dd>
-                    <dt>Accommodation phone number</dt><dd></dd>
-                    <dt>Nights booked</dt><dd></dd>
-                </dl>
+                <p>information on hotel rooms requested</p>
 
-                <a>Request booking</a>
             </div>
         </div>
     </div>
-</div>
-
-<div class="row">
-    <div class="col-md-6">
-        <div class="card spur-card">
-            <div class="card-header">
-                <div class="spur-card-icon">
-                    <i class="fas fa-table"></i>
-                </div>
-                <div class="spur-card-title">Venue information</div>
-            </div>
-            <div class="card-body ">
-                <dl>
-                    <dt>Name</dt><dd></dd>
-                    <dt>Address</dt><dd></dd>
-                    <dt>Dates</dt><dd></dd>
-                </dl>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-6">
-        <div class="card spur-card">
-            <div class="card-header">
-                <div class="spur-card-icon">
-                    <i class="fas fa-table"></i>
-                </div>
-                <div class="spur-card-title">Av information</div>
-            </div>
-            <div class="card-body ">
-                <p>Add information here about AV details</p>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="row">
     <div class="col-md-6">
         <div class="card spur-card">
             <div class="card-header">
@@ -186,7 +113,37 @@ $speaker = $this->speaker
             </div>
             <div class="card-body ">
                 <p>Details about said activities</p>
-                <a>RSVP</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card spur-card">
+            <div class="card-header">
+                <div class="spur-card-icon">
+                    <i class="fas fa-table"></i>
+                </div>
+                <div class="spur-card-title">Travel Details</div>
+            </div>
+            <div class="card-body ">
+                <table class="table table-in-card">
+                    <thead>
+                    <tr><th>Depart From</th><th>Departure Time</th><th>Arrive At</th><th>Arrival Time</th><th>Notes</th></tr>
+                    </thead>
+                    <tbody>
+                    <?php foreach ($speaker->getJourneys() as $journey): ?>
+                        <tr>
+                            <td><?=$journey->getDepartFrom()?></td>
+                            <td><?=$journey->getDepartureTime()->format('Y-m-d h:i')?></td>
+                            <td><?=$journey->getArriveAt()?></td>
+                            <td><?=$journey->getArrivalTime()->format('Y-m-d h:i')?></td>
+                            <td><?=$journey->getNotes()?></td>
+                        </tr>
+                    <?php endforeach;?>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

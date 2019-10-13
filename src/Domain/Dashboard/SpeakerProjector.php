@@ -2,6 +2,7 @@
 
 namespace ConferenceTools\Speakers\Domain\Dashboard;
 
+use ConferenceTools\Speakers\Domain\Speaker\Event\TalkWasCancelled;
 use Phactor\Message\DomainMessage;
 use Phactor\Message\Handler;
 use Phactor\ReadModel\Repository;
@@ -33,6 +34,9 @@ class SpeakerProjector implements Handler
                 break;
             case $message instanceof TalkWasUpdated:
                 $this->updateTalk($message);
+                break;
+            case $message instanceof TalkWasCancelled:
+                $this->cancelTalk($message);
                 break;
             case $message instanceof ProfileWasUpdated:
                 $this->updateProfile($message);
@@ -73,7 +77,7 @@ class SpeakerProjector implements Handler
     {
         /** @var Speaker $speaker */
         $speaker = $this->repository->get($message->getId());
-        $speaker->updateProfile($message->getName(), $message->getEmail(), $message->getBio(), $message->getSpecialRequirements());
+        $speaker->updateProfile($message->getName(), $message->getEmail(), $message->getBio(), $message->getSpecialRequirements(), $message->getDietaryRequirements());
     }
 
     private function addJourney(JourneyDetailsProvided $message)
@@ -81,5 +85,12 @@ class SpeakerProjector implements Handler
         /** @var Speaker $speaker */
         $speaker = $this->repository->get($message->getId());
         $speaker->addJourney($message->getJourney());
+    }
+
+    private function cancelTalk(TalkWasCancelled $message)
+    {
+        /** @var Speaker $speaker */
+        $speaker = $this->repository->get($message->getSpeakerId());
+        $speaker->cancelTalk($message->getTalkNumber());
     }
 }

@@ -4,6 +4,7 @@
 namespace ConferenceTools\Speakers\Domain\Dashboard\Entity;
 
 use ConferenceTools\Speakers\Domain\Speaker\Bio;
+use ConferenceTools\Speakers\Domain\Speaker\DietaryRequirements;
 use ConferenceTools\Speakers\Domain\Speaker\Email;
 use ConferenceTools\Speakers\Domain\Speaker\Journey as JourneyVO;
 use ConferenceTools\Speakers\Domain\Speaker\Talk as TalkVO;
@@ -75,6 +76,14 @@ class Speaker
      *     )
      */
     private $journeys;
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $preference;
+    /**
+     * @ORM\Column(type="string")
+     */
+    private $allergies = '';
 
 
     public function __construct(string $identity, string $name, Email $email, Bio $bio)
@@ -129,6 +138,16 @@ class Speaker
         return $this->specialRequirements;
     }
 
+    public function getPreference()
+    {
+        return $this->preference;
+    }
+
+    public function getAllergies()
+    {
+        return $this->allergies;
+    }
+
     public function addTalk(int $index, TalkVO $talk)
     {
         $this->talks->add(new Talk($this, $index, $talk));
@@ -167,7 +186,7 @@ class Speaker
         $talk->update($newTalk->getTitle(), $newTalk->getAbstract());
     }
 
-    public function updateProfile(string $name, Email $email, Bio $bio, string $specialRequirements)
+    public function updateProfile(string $name, Email $email, Bio $bio, string $specialRequirements, DietaryRequirements $dietaryRequirements)
     {
         $this->name = $name;
         $this->email = $email->getEmail();
@@ -175,6 +194,8 @@ class Speaker
         $this->twitter = $bio->getTwitterHandle();
         $this->aboutMe = $bio->getAboutMe();
         $this->specialRequirements = $specialRequirements;
+        $this->preference = $dietaryRequirements->getPreference();
+        $this->allergies = $dietaryRequirements->getAllergies();
     }
 
     public function addJourney(JourneyVO $journey)
@@ -185,5 +206,11 @@ class Speaker
     public function getJourneys()
     {
         return $this->journeys;
+    }
+
+    public function cancelTalk(int $talkNumber)
+    {
+        $talk = $this->getTalk($talkNumber);
+        $this->talks->removeElement($talk);
     }
 }

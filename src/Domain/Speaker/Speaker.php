@@ -119,7 +119,8 @@ class Speaker extends AbstractActor
             $command->getName(),
             $command->getEmail(),
             $command->getBio(),
-            $command->getSpecialRequirements()
+            $command->getSpecialRequirements(),
+            $command->getDietaryRequirements()
         ));
     }
 

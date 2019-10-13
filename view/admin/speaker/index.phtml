@@ -1,0 +1,28 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="card spur-card">
+            <div class="card-header">
+                <div class="spur-card-icon">
+                    <i class="fas fa-table"></i>
+                </div>
+                <div class="spur-card-title">Speakers</div>
+            </div>
+            <div class="card-body ">
+                <table class="table table-in-card">
+                    <thead>
+                    <tr><th>Name</th><th>Email</th><th>Accepted</th></tr>
+                    </thead>
+                    <tbody>
+                    <?php foreach ($this->speakers as $speaker): ?>
+                        <tr>
+                            <td><a href="<?=$this->url('speakers/speaker', ['speakerId' => $speaker->getIdentity()])?>"><?=$this->escapeHtml($speaker->getName())?></a></td>
+                            <td><?=$this->escapeHtml($speaker->getEmail())?></td>
+                            <td><?=$speaker->hasResponded() ? ($speaker->hasAccepted() ? 'Accepted' : 'Declined') : 'Not Responded'?></td>
+                        </tr>
+                    <?php endforeach;?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

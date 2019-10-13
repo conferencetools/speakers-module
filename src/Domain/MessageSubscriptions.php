@@ -58,7 +58,9 @@ class MessageSubscriptions
             SpeakerEvent\TalkWasUpdated::class => [
                 SpeakerProjector::class,
             ],
-            SpeakerEvent\TalkWasCancelled::class => [],
+            SpeakerEvent\TalkWasCancelled::class => [
+                SpeakerProjector::class,
+            ],
             SpeakerEvent\JourneyDetailsProvided::class => [
                 SpeakerProjector::class,
             ],

@@ -3,8 +3,12 @@ return [
     'default' => [
         [
             'label' => 'Speakers',
-            'route' => 'speakers/dashboard',
+            'uri' => '',
             'pages' => [
+                [
+                    'label' => 'List',
+                    'route' => 'speakers/speakers',
+                ],
                 [
                     'label' => 'Import',
                     'route' => 'speakers/import',

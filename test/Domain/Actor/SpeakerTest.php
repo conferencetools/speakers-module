@@ -4,7 +4,7 @@
 namespace ConferenceTools\Speakers\Domain\Actor;
 
 
-use Carnage\Phactor\Test\ActorHelper;
+use Phactor\Test\ActorHelper;
 use ConferenceTools\Speakers\Domain\Speaker\Command\AcceptInvitation;
 use ConferenceTools\Speakers\Domain\Speaker\Command\InviteToSpeak;
 use ConferenceTools\Speakers\Domain\Speaker\Event\SpeakerAcceptedInvitation;
