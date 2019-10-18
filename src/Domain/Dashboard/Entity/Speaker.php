@@ -77,6 +77,18 @@ class Speaker
      */
     private $journeys;
     /**
+     * @var TravelReimbursement[]|ArrayCollection
+     *
+     * @ORM\OneToMany(
+     *     targetEntity="ConferenceTools\Speakers\Domain\Dashboard\Entity\TravelReimbursement",
+     *     mappedBy="speaker",
+     *     indexBy="reimbursementRequestId",
+     *     cascade={"persist", "remove"},
+     *     orphanRemoval=true
+     *     )
+     */
+    private $travelReimbursements;
+    /**
      * @ORM\Column(type="string", nullable=true)
      */
     private $preference;
@@ -96,6 +108,7 @@ class Speaker
         $this->aboutMe = $bio->getAboutMe();
         $this->talks = new ArrayCollection();
         $this->journeys = new ArrayCollection();
+        $this->travelReimbursements = new ArrayCollection();
     }
 
     public function getIdentity()
@@ -212,5 +225,21 @@ class Speaker
     {
         $talk = $this->getTalk($talkNumber);
         $this->talks->removeElement($talk);
+    }
+
+    public function addTravelReimbursement(string $reimbursementRequestId, int $amount, string $notes)
+    {
+        $travelReimbursement = new TravelReimbursement($this, $reimbursementRequestId, $amount, $notes);
+        $this->travelReimbursements->add($travelReimbursement);
+    }
+
+    public function getTravelReimbursements()
+    {
+        return $this->travelReimbursements;
+    }
+
+    public function getTravelReimbursement(string $id): TravelReimbursement
+    {
+        return $this->travelReimbursements->get($id);
     }
 }

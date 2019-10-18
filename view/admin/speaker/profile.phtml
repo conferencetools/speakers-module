@@ -13,14 +13,14 @@ $speaker = $this->speaker
             </div>
             <div class="card-body ">
                 <dl>
-                    <dt>Name</dt><dd><?=$speaker->getName()?></dd>
-                    <dt>Email</dt><dd><?=$speaker->getEmail()?></dd>
-                    <dt>Twitter</dt><dd><?=$speaker->getTwitter()?></dd>
-                    <dt>Company</dt><dd><?=$speaker->getCompany()?></dd>
-                    <dt>Bio</dt><dd><?=$speaker->getAboutMe()?></dd>
+                    <dt>Name</dt><dd><?=$this->escapeHtml($speaker->getName())?></dd>
+                    <dt>Email</dt><dd><?=$this->escapeHtml($speaker->getEmail())?></dd>
+                    <dt>Twitter</dt><dd><?=$this->escapeHtml($speaker->getTwitter())?></dd>
+                    <dt>Company</dt><dd><?=$this->escapeHtml($speaker->getCompany())?></dd>
+                    <dt>Bio</dt><dd><?=$this->escapeHtml($speaker->getAboutMe())?></dd>
                     <dt>Dietary Preference</dt><dd><?=ucfirst($speaker->getPreference())?></dd>
-                    <dt>Allergies</dt><dd><?=$speaker->getAllergies()?></dd>
-                    <dt>Accessibility requirements</dt><dd><?=$speaker->getSpecialRequirements()?></dd>
+                    <dt>Allergies</dt><dd><?=$this->escapeHtml($speaker->getAllergies())?></dd>
+                    <dt>Accessibility requirements</dt><dd><?=$this->escapeHtml($speaker->getSpecialRequirements())?></dd>
                 </dl>
                 <a class="btn btn-primary" href="<?=$this->url('speakers/speaker/edit', ['speakerId' => $speaker->getIdentity()])?>">Edit</a>
             </div>
@@ -42,11 +42,11 @@ $speaker = $this->speaker
                     <tbody>
                     <?php foreach ($speaker->getTalks() as $talk): ?>
                         <tr>
-                            <td><?=$talk->getTitle()?></td>
-                            <td><?=$talk->getAbstract()?></td>
+                            <td><?=$this->escapeHtml($talk->getTitle())?></td>
+                            <td><?=$this->escapeHtml($talk->getAbstract())?></td>
                             <td>
-                                <a class="btn btn-primary" href="<?=$this->url('speakers/talk/edit', ['talkId' => $talk->getIndex(), 'speakerId' => $speaker->getIdentity()])?>">Edit</a>
-                                <a class="btn btn-danger" href="<?=$this->url('speakers/talk/cancel', ['talkId' => $talk->getIndex(), 'speakerId' => $speaker->getIdentity()])?>">Cancel</a>
+                                <a class="btn btn-primary" href="<?=$this->url('speakers/speaker/talk/edit', ['talkId' => $talk->getIndex(), 'speakerId' => $speaker->getIdentity()])?>">Edit</a>
+                                <a class="btn btn-danger" href="<?=$this->url('speakers/speaker/talk/cancel', ['talkId' => $talk->getIndex(), 'speakerId' => $speaker->getIdentity()])?>">Cancel</a>
                             </td>
                         </tr>
                     <?php endforeach;?>
@@ -67,8 +67,42 @@ $speaker = $this->speaker
                 <div class="spur-card-title">Travel Reimbursement</div>
             </div>
             <div class="card-body ">
-                <p>Display info on reimbursments</p>
-                <a>Request travel reimbursement</a>
+                <table class="table table-in-card">
+                    <thead>
+                    <tr><th>Amount</th><th>Status</th><th>Notes</th><th></th></tr>
+                    </thead>
+                    <tbody>
+                    <?php foreach ($speaker->getTravelReimbursements() as $reimbursement): ?>
+                        <tr>
+                            <td>£<?=$reimbursement->getAmount() / 100?></td>
+                            <td><?=$reimbursement->getStatus()?></td>
+                            <td>
+                                <?php if ($reimbursement->getRequestNotes() !== ''): ?>
+                                    <p><?=$this->escapeHtml($reimbursement->getRequestNotes())?></p>
+                                <?php endif?>
+                                <?php if ($reimbursement->isRejected() && $reimbursement->getRejectReason() !== ''): ?>
+                                    <p><?=$this->escapeHtml($reimbursement->getRejectReason())?></p>
+                                <?php endif?>
+                                <?php if ($reimbursement->isAccepted() && $reimbursement->getAcceptNotes() !== ''): ?>
+                                    <p><?=$this->escapeHtml($reimbursement->getAcceptNotes())?></p>
+                                <?php endif?>
+                                <?php if ($reimbursement->isPaid() && $reimbursement->getPaymentNotes() !== ''): ?>
+                                    <p><?=$this->escapeHtml($reimbursement->getPaymentNotes())?></p>
+                                <?php endif?>
+                            </td>
+                            <td>
+                                <?php if ($reimbursement->isRequested()):?>
+                                <a class="btn btn-primary" href="<?=$this->url('speakers/speaker/travel-reimbursement/accept', ['reimbursementRequestId' => $reimbursement->getReimbursementRequestId(), 'speakerId' => $speaker->getIdentity()])?>">Accept</a>
+                                <a class="btn btn-danger" href="<?=$this->url('speakers/speaker/travel-reimbursement/reject', ['reimbursementRequestId' => $reimbursement->getReimbursementRequestId(), 'speakerId' => $speaker->getIdentity()])?>">Reject</a>
+                                <?php endif?>
+                                <?php if ($reimbursement->isAccepted()):?>
+                                <a class="btn btn-primary" href="<?=$this->url('speakers/speaker/travel-reimbursement/paid', ['reimbursementRequestId' => $reimbursement->getReimbursementRequestId(), 'speakerId' => $speaker->getIdentity()])?>">Paid</a>
+                                <?php endif?>
+                            </td>
+                        </tr>
+                    <?php endforeach;?>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -135,11 +169,11 @@ $speaker = $this->speaker
                     <tbody>
                     <?php foreach ($speaker->getJourneys() as $journey): ?>
                         <tr>
-                            <td><?=$journey->getDepartFrom()?></td>
+                            <td><?=$this->escapeHtml($journey->getDepartFrom())?></td>
                             <td><?=$journey->getDepartureTime()->format('Y-m-d h:i')?></td>
-                            <td><?=$journey->getArriveAt()?></td>
+                            <td><?=$this->escapeHtml($journey->getArriveAt())?></td>
                             <td><?=$journey->getArrivalTime()->format('Y-m-d h:i')?></td>
-                            <td><?=$journey->getNotes()?></td>
+                            <td><?=$this->escapeHtml($journey->getNotes())?></td>
                         </tr>
                     <?php endforeach;?>
                     </tbody>

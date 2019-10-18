@@ -13,6 +13,10 @@ return [
                     'label' => 'Import',
                     'route' => 'speakers/import',
                 ],
+                [
+                    'label' => 'Travel Reimbursement',
+                    'route' => 'speakers/travel-reimbursement',
+                ],
             ],
         ],
     ],

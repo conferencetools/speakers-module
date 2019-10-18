@@ -104,6 +104,15 @@ return [
                             ],
                         ],
                     ],
+                    'request-reimbursement' => [
+                        'type' => Literal::class,
+                        'options' => [
+                            'route' => '/request-reimbursement',
+                            'defaults' => [
+                                'action' => 'request-reimbursement',
+                            ],
+                        ],
+                    ],
                 ],
             ],
 
@@ -150,45 +159,93 @@ return [
                             ],
                         ],
                     ],
+                    'talk' => [
+                        'type' => Segment::class,
+                        'options' => [
+                            'route' => '/talk',
+                            'defaults' => [
+                                'controller' => Controller\Admin\TalkController::class,
+                            ],
+                        ],
+                        'child_routes' => [
+                            'cancel' => [
+                                'type' => Segment::class,
+                                'options' => [
+                                    'route' => '/:talkId/cancel',
+                                    'defaults' => [
+                                        'action' => 'cancel'
+                                    ],
+                                ],
+                            ],
+                            'edit' => [
+                                'type' => Segment::class,
+                                'options' => [
+                                    'route' => '/:talkId/edit',
+                                    'defaults' => [
+                                        'action' => 'edit'
+                                    ],
+                                ],
+                            ],
+                            'add' => [
+                                'type' => Literal::class,
+                                'options' => [
+                                    'route' => '/add',
+                                    'defaults' => [
+                                        'action' => 'add'
+                                    ],
+                                ],
+                            ],
+                        ]
+                    ],
+                    'travel-reimbursement' => [
+                        'type' => Segment::class,
+                        'options' => [
+                            'route' => '/travel-reimbursement',
+                            'defaults' => [
+                                'controller' => Controller\Admin\TravelReimbursementController::class,
+                            ],
+                        ],
+                        'child_routes' => [
+                            'reject' => [
+                                'type' => Segment::class,
+                                'options' => [
+                                    'route' => '/:reimbursementRequestId/reject',
+                                    'defaults' => [
+                                        'action' => 'reject'
+                                    ],
+                                ],
+                            ],
+                            'accept' => [
+                                'type' => Segment::class,
+                                'options' => [
+                                    'route' => '/:reimbursementRequestId/accept',
+                                    'defaults' => [
+                                        'action' => 'accept'
+                                    ],
+                                ],
+                            ],
+                            'paid' => [
+                                'type' => Segment::class,
+                                'options' => [
+                                    'route' => '/:reimbursementRequestId/paid',
+                                    'defaults' => [
+                                        'action' => 'paid'
+                                    ],
+                                ],
+                            ],
+                        ]
+                    ],
                 ],
             ],
-            'talk' => [
-                'type' => Segment::class,
+            'travel-reimbursement' => [
+                'type' => Literal::class,
                 'options' => [
-                    'route' => '/talk/:speakerId',
+                    'route' => '/travel-reimbursement',
                     'defaults' => [
-                        'controller' => Controller\Admin\TalkController::class,
+                        'action' => 'index',
+                        'controller' => Controller\Admin\TravelReimbursementController::class,
                     ],
                 ],
-                'child_routes' => [
-                    'cancel' => [
-                        'type' => Segment::class,
-                        'options' => [
-                            'route' => '/:talkId/cancel',
-                            'defaults' => [
-                                'action' => 'cancel'
-                            ],
-                        ],
-                    ],
-                    'edit' => [
-                        'type' => Segment::class,
-                        'options' => [
-                            'route' => '/:talkId/edit',
-                            'defaults' => [
-                                'action' => 'edit'
-                            ],
-                        ],
-                    ],
-                    'add' => [
-                        'type' => Literal::class,
-                        'options' => [
-                            'route' => '/add',
-                            'defaults' => [
-                                'action' => 'add'
-                            ],
-                        ],
-                    ],
-                ]
             ],
         ]
     ]

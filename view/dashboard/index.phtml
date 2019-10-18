@@ -13,14 +13,14 @@ $speaker = $this->speaker
             </div>
             <div class="card-body ">
                 <dl>
-                    <dt>Name</dt><dd><?=$speaker->getName()?></dd>
-                    <dt>Email</dt><dd><?=$speaker->getEmail()?></dd>
-                    <dt>Twitter</dt><dd><?=$speaker->getTwitter()?></dd>
-                    <dt>Company</dt><dd><?=$speaker->getCompany()?></dd>
-                    <dt>Bio</dt><dd><?=$speaker->getAboutMe()?></dd>
+                    <dt>Name</dt><dd><?=$this->escapeHtml($speaker->getName())?></dd>
+                    <dt>Email</dt><dd><?=$this->escapeHtml($speaker->getEmail())?></dd>
+                    <dt>Twitter</dt><dd><?=$this->escapeHtml($speaker->getTwitter())?></dd>
+                    <dt>Company</dt><dd><?=$this->escapeHtml($speaker->getCompany())?></dd>
+                    <dt>Bio</dt><dd><?=$this->escapeHtml($speaker->getAboutMe())?></dd>
                     <dt>Dietary Preference</dt><dd><?=ucfirst($speaker->getPreference())?></dd>
-                    <dt>Allergies</dt><dd><?=$speaker->getAllergies()?></dd>
-                    <dt>Accessibility requirements</dt><dd><?=$speaker->getSpecialRequirements()?></dd>
+                    <dt>Allergies</dt><dd><?=$this->escapeHtml($speaker->getAllergies())?></dd>
+                    <dt>Accessibility requirements</dt><dd><?=$this->escapeHtml($speaker->getSpecialRequirements())?></dd>
                 </dl>
                 <a class="btn btn-primary" href="<?=$this->url('speakers/edit-profile')?>">Edit</a>
             </div>
@@ -42,8 +42,8 @@ $speaker = $this->speaker
                     <tbody>
                     <?php foreach ($speaker->getTalks() as $talk): ?>
                         <tr>
-                            <td><?=$talk->getTitle()?></td>
-                            <td><?=$talk->getAbstract()?></td>
+                            <td><?=$this->escapeHtml($talk->getTitle())?></td>
+                            <td><?=$this->escapeHtml($talk->getAbstract())?></td>
                             <td><a class="btn btn-primary" href="<?=$this->url('speakers/edit-talk', ['talkId' => $talk->getIndex()])?>">Edit</a></td>
 
                         </tr>
@@ -73,11 +73,11 @@ $speaker = $this->speaker
                 <tbody>
                 <?php foreach ($speaker->getJourneys() as $journey): ?>
                     <tr>
-                        <td><?=$journey->getDepartFrom()?></td>
+                        <td><?=$this->escapeHtml($journey->getDepartFrom())?></td>
                         <td><?=$journey->getDepartureTime()->format('Y-m-d h:i')?></td>
-                        <td><?=$journey->getArriveAt()?></td>
+                        <td><?=$this->escapeHtml($journey->getArriveAt())?></td>
                         <td><?=$journey->getArrivalTime()->format('Y-m-d h:i')?></td>
-                        <td><?=$journey->getNotes()?></td>
+                        <td><?=$this->escapeHtml($journey->getNotes())?></td>
                     </tr>
                 <?php endforeach;?>
                 </tbody>
@@ -98,8 +98,48 @@ $speaker = $this->speaker
                 <div class="spur-card-title">Travel Reimbursement</div>
             </div>
             <div class="card-body ">
-                <p>Display info on reimbursments</p>
-                <a>Request travel reimbursement</a>
+                <p>
+                    PHP Yorkshire will reimburse all travel costs for speakers at this year's event. We have a soft limit of £200 per speaker to cover this, we aim to cover costs which
+                    come in above this limit provided there is sufficient budget to do so.
+                </p>
+                <p>
+                    We will aim to make all payments within 7 days of submission unless a) You are a workshop speaker or b) your request is for greater than the £200 limit. In both these
+                    cases we will make payment after the conference, for workshop speakers this will be for your travel and any payment due under the profit share arrangement in a single
+                    payment. For speakers over the limit we will pay out the £200 limit plus as much up to the full amount as possible.
+                </p>
+                <p>
+                    If you would like us to pay out earlier or need the travel costs covering prior to purchase of tickets, please fill out the form and let us know in the notes that
+                    you require this. We will then need you to submit a second request once the tickets are purchased containing the receipt for our records.
+                </p>
+                <table class="table table-in-card">
+                    <thead>
+                    <tr><th>Amount</th><th>Status</th><th>Notes</th></tr>
+                    </thead>
+                    <tbody>
+                    <?php foreach ($speaker->getTravelReimbursements() as $reimbursement): ?>
+                        <tr>
+                            <td>£<?=$reimbursement->getAmount() / 100?></td>
+                            <td><?=$reimbursement->getStatus()?></td>
+                            <td>
+                                <?php if ($reimbursement->getRequestNotes() !== ''): ?>
+                                    <p><?=$this->escapeHtml($reimbursement->getRequestNotes())?></p>
+                                <?php endif?>
+                                <?php if ($reimbursement->isRejected() && $reimbursement->getRejectReason() !== ''): ?>
+                                    <p><?=$this->escapeHtml($reimbursement->getRejectReason())?></p>
+                                <?php endif?>
+                                <?php if ($reimbursement->isAccepted() && $reimbursement->getAcceptNotes() !== ''): ?>
+                                    <p><?=$this->escapeHtml($reimbursement->getAcceptNotes())?></p>
+                                <?php endif?>
+                                <?php if ($reimbursement->isPaid() && $reimbursement->getPaymentNotes() !== ''): ?>
+                                    <p><?=$this->escapeHtml($reimbursement->getPaymentNotes())?></p>
+                                <?php endif?>
+                            </td>
+                        </tr>
+                    <?php endforeach;?>
+                    </tbody>
+                </table>
+                <a class="btn btn-primary mt-4" href="<?=$this->url('speakers/travel/request-reimbursement', ['speakerId' => $speaker->getIdentity()])?>">Request travel reimbursement</a>
+                <a></a>
             </div>
         </div>
     </div>

@@ -3,6 +3,10 @@
 namespace ConferenceTools\Speakers\Domain\Dashboard;
 
 use ConferenceTools\Speakers\Domain\Speaker\Event\TalkWasCancelled;
+use ConferenceTools\Speakers\Domain\Speaker\Event\TravelReimbursementAccepted;
+use ConferenceTools\Speakers\Domain\Speaker\Event\TravelReimbursementPaid;
+use ConferenceTools\Speakers\Domain\Speaker\Event\TravelReimbursementRejected;
+use ConferenceTools\Speakers\Domain\Speaker\Event\TravelReimbursementRequested;
 use Phactor\Message\DomainMessage;
 use Phactor\Message\Handler;
 use Phactor\ReadModel\Repository;
@@ -44,9 +48,27 @@ class SpeakerProjector implements Handler
             case $message instanceof JourneyDetailsProvided:
                 $this->addJourney($message);
                 break;
+
+            case $message instanceof TravelReimbursementRequested:
+                $this->travelReimbursementRequested($message);
+                break;
+            case $message instanceof TravelReimbursementAccepted:
+                $this->travelReimbursementAccepted($message);
+                break;
+            case $message instanceof TravelReimbursementPaid:
+                $this->travelReimbursementPaid($message);
+                break;
+            case $message instanceof TravelReimbursementRejected:
+                $this->travelReimbursementRejected($message);
+                break;
         }
 
         $this->repository->commit();
+    }
+
+    private function fetchSpeaker(string $speakerId): Speaker
+    {
+        return $this->repository->get($speakerId);
     }
 
     private function createSpeaker(SpeakerWasInvited $message)
@@ -92,5 +114,31 @@ class SpeakerProjector implements Handler
         /** @var Speaker $speaker */
         $speaker = $this->repository->get($message->getSpeakerId());
         $speaker->cancelTalk($message->getTalkNumber());
+    }
+    private function travelReimbursementRequested(TravelReimbursementRequested $message)
+    {
+        $speaker = $this->fetchSpeaker($message->getSpeakerId());
+        $speaker->addTravelReimbursement($message->getReimbursementRequestId(), $message->getAmount(), $message->getNotes());
+    }
+
+    private function travelReimbursementAccepted(TravelReimbursementAccepted $message)
+    {
+        $speaker = $this->fetchSpeaker($message->getSpeakerId());
+        $travelReimbursement = $speaker->getTravelReimbursement($message->getReimbursementRequestId());
+        $travelReimbursement->accept($message->getNotes());
+    }
+
+    private function travelReimbursementRejected(TravelReimbursementRejected $message)
+    {
+        $speaker = $this->fetchSpeaker($message->getSpeakerId());
+        $travelReimbursement = $speaker->getTravelReimbursement($message->getReimbursementRequestId());
+        $travelReimbursement->reject($message->getReason());
+    }
+
+    private function travelReimbursementPaid(TravelReimbursementPaid $message)
+    {
+        $speaker = $this->fetchSpeaker($message->getSpeakerId());
+        $travelReimbursement = $speaker->getTravelReimbursement($message->getReimbursementRequestId());
+        $travelReimbursement->pay($message->getNotes());
     }
 }

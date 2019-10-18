@@ -13,7 +13,7 @@ $speaker = $this->speaker
             </div>
             <div class="card-body ">
                 <p>
-                    Thank you for submitting to our call for papers, <?= $speaker->getName()?> we would like to extend an invitation
+                    Thank you for submitting to our call for papers, <?=$this->escapeHtml($speaker->getName())?> we would like to extend an invitation
                     to you for the following talks:
                 </p>
 
@@ -24,8 +24,8 @@ $speaker = $this->speaker
                     <tbody>
                     <?php foreach ($speaker->getTalks() as $talk): ?>
                         <tr>
-                            <td><?=$talk->getTitle()?></td>
-                            <td><?=$talk->getAbstract()?></td>
+                            <td><?=$this->escapeHtml($talk->getTitle())?></td>
+                            <td><?=$this->escapeHtml($talk->getAbstract())?></td>
                         </tr>
                     <?php endforeach;?>
                     </tbody>

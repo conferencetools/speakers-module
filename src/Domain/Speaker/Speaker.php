@@ -2,6 +2,15 @@
 
 namespace ConferenceTools\Speakers\Domain\Speaker;
 
+use ConferenceTools\Speakers\Domain\Speaker\Command\AcceptTravelReimbursement;
+use ConferenceTools\Speakers\Domain\Speaker\Command\PayTravelReimbursement;
+use ConferenceTools\Speakers\Domain\Speaker\Command\RejectTravelReimbursement;
+use ConferenceTools\Speakers\Domain\Speaker\Command\RequestTravelReimbursement;
+use ConferenceTools\Speakers\Domain\Speaker\Event\TravelReimbursementAccepted;
+use ConferenceTools\Speakers\Domain\Speaker\Event\TravelReimbursementPaid;
+use ConferenceTools\Speakers\Domain\Speaker\Event\TravelReimbursementRejected;
+use ConferenceTools\Speakers\Domain\Speaker\Event\TravelReimbursementRequested;
+use mysql_xdevapi\Exception;
 use Phactor\Actor\AbstractActor;
 use ConferenceTools\Speakers\Domain\Speaker\Command\AcceptInvitation;
 use ConferenceTools\Speakers\Domain\Speaker\Command\AddAdditionalTalk;
@@ -22,12 +31,18 @@ use ConferenceTools\Speakers\Domain\Speaker\Event\TalkWasUpdated;
 
 class Speaker extends AbstractActor
 {
+    private const REIMBURSEMENT_REQUESTED = 'reimbursement-requested';
+    private const REIMBURSEMENT_REJECTED = 'reimbursement-rejected';
+    private const REIMBURSEMENT_ACCEPTED = 'reimbursement-accepted';
+    private const REIMBURSEMENT_PAID = 'reimbursement-paid';
+
     private $email;
     private $name;
     private $talks;
     private $bio;
     private $accepted;
     private $journeys;
+    private $travelReimbursementRequests = [];
 
     protected function handleInviteToSpeak(InviteToSpeak $command)
     {
@@ -133,7 +148,6 @@ class Speaker extends AbstractActor
      * AccomodationBooked
      * +Declined, partially booked
      *
-     * TravelDetailsProvided
      * TravelReimbursementRequest
      * TravelReimbursementSent
      * TravelReimbursementDeclined
@@ -153,5 +167,62 @@ class Speaker extends AbstractActor
     protected function applyJourneyDetailsProvided(JourneyDetailsProvided $event)
     {
         $this->journeys[] = $event->getJourney();
+    }
+
+    protected function handleRequestTravelReimbursement(RequestTravelReimbursement $command)
+    {
+        $reimbursementRequestId = $this->generateIdentity();
+
+        $this->fire(new TravelReimbursementRequested($command->getSpeakerId(), $command->getAmount(), $command->getNotes(), $command->getFile(), $reimbursementRequestId));
+    }
+
+    protected function applyTravelReimbursementRequested(TravelReimbursementRequested $event)
+    {
+        $this->travelReimbursementRequests[$event->getReimbursementRequestId()] = self::REIMBURSEMENT_REQUESTED;
+    }
+
+    protected function handleRejectTravelReimbursement(RejectTravelReimbursement $command)
+    {
+        if (
+            isset($this->travelReimbursementRequests[$command->getReimbursementRequestId()]) &&
+            $this->travelReimbursementRequests[$command->getReimbursementRequestId()] === self::REIMBURSEMENT_REQUESTED
+        ) {
+            $this->fire(new TravelReimbursementRejected($command->getSpeakerId(), $command->getReimbursementRequestId(), $command->getReason()));
+        }
+    }
+
+    protected function applyTravelReimbursementRejected(TravelReimbursementRejected $event)
+    {
+        $this->travelReimbursementRequests[$event->getReimbursementRequestId()] = self::REIMBURSEMENT_REJECTED;
+    }
+
+    protected function handleAcceptTravelReimbursement(AcceptTravelReimbursement $command)
+    {
+        if (
+            isset($this->travelReimbursementRequests[$command->getReimbursementRequestId()]) &&
+            $this->travelReimbursementRequests[$command->getReimbursementRequestId()] === self::REIMBURSEMENT_REQUESTED
+        ) {
+            $this->fire(new TravelReimbursementAccepted($command->getSpeakerId(), $command->getReimbursementRequestId(), $command->getNotes()));
+        }
+    }
+
+    protected function applyTravelReimbursementAccepted(TravelReimbursementAccepted $event)
+    {
+        $this->travelReimbursementRequests[$event->getReimbursementRequestId()] = self::REIMBURSEMENT_ACCEPTED;
+    }
+
+    protected function handlePayTravelReimbursement(PayTravelReimbursement $command)
+    {
+        if (
+            isset($this->travelReimbursementRequests[$command->getReimbursementRequestId()]) &&
+            $this->travelReimbursementRequests[$command->getReimbursementRequestId()] === self::REIMBURSEMENT_ACCEPTED
+        ) {
+            $this->fire(new TravelReimbursementPaid($command->getSpeakerId(), $command->getReimbursementRequestId(), $command->getNotes()));
+        }
+    }
+
+    protected function applyTravelReimbursementPaid(TravelReimbursementPaid $event)
+    {
+        $this->travelReimbursementRequests[$event->getReimbursementRequestId()] = self::REIMBURSEMENT_PAID;
     }
 }

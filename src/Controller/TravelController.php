@@ -3,8 +3,10 @@
 namespace ConferenceTools\Speakers\Controller;
 
 use ConferenceTools\Speakers\Domain\Speaker\Command\ProvideJourneyDetails;
+use ConferenceTools\Speakers\Domain\Speaker\Command\RequestTravelReimbursement;
 use ConferenceTools\Speakers\Domain\Speaker\Journey;
 use ConferenceTools\Speakers\Form\ProvideTravelDetails;
+use ConferenceTools\Speakers\Form\RequestTravelReimbursementForm;
 use Zend\View\Model\ViewModel;
 
 class TravelController extends AppController
@@ -32,7 +34,36 @@ class TravelController extends AppController
                 );
                 $this->messageBus()->fire($command);
 
-                $this->flashMessenger()->addSuccessMessage('Travel details added ');
+                $this->flashMessenger()->addSuccessMessage('Travel details added');
+                $this->redirect()->toRoute('speakers/dashboard');
+            }
+        }
+
+        $viewModel = new ViewModel(['form' => $form, 'action' => 'Provide travel details']);
+        $viewModel->setTemplate('admin/form');
+        return $viewModel;
+    }
+
+    public function requestReimbursementAction()
+    {
+        $speaker = $this->currentSpeaker();
+        $form = $this->form(RequestTravelReimbursementForm::class);
+
+        if ($this->getRequest()->isPost()) {
+            $data = $this->params()->fromPost();
+            $form->setData($data);
+
+            if ($form->isValid()) {
+                $data = $form->getData();
+                $command = new RequestTravelReimbursement(
+                    $speaker->getIdentity(),
+                    $data['amount'] * 100,
+                    $data['notes'],
+                    ''
+                );
+                $this->messageBus()->fire($command);
+
+                $this->flashMessenger()->addSuccessMessage('Travel reimbursement requested, one of the organisers will look at it shortly');
                 $this->redirect()->toRoute('speakers/dashboard');
             }
         }

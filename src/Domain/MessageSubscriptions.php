@@ -40,6 +40,18 @@ class MessageSubscriptions
             SpeakerCommand\ProvideJourneyDetails::class => [
                 Speaker::class,
             ],
+            SpeakerCommand\RejectTravelReimbursement::class => [
+                Speaker::class,
+            ],
+            SpeakerCommand\RequestTravelReimbursement::class => [
+                Speaker::class,
+            ],
+            SpeakerCommand\AcceptTravelReimbursement::class => [
+                Speaker::class,
+            ],
+            SpeakerCommand\PayTravelReimbursement::class => [
+                Speaker::class,
+            ],
 
             SpeakerEvent\SpeakerWasInvited::class => [
                 UpdateWebsite::class,
@@ -62,6 +74,18 @@ class MessageSubscriptions
                 SpeakerProjector::class,
             ],
             SpeakerEvent\JourneyDetailsProvided::class => [
+                SpeakerProjector::class,
+            ],
+            SpeakerEvent\TravelReimbursementRequested::class => [
+                SpeakerProjector::class,
+            ],
+            SpeakerEvent\TravelReimbursementRejected::class => [
+                SpeakerProjector::class,
+            ],
+            SpeakerEvent\TravelReimbursementAccepted::class => [
+                SpeakerProjector::class,
+            ],
+            SpeakerEvent\TravelReimbursementPaid::class => [
                 SpeakerProjector::class,
             ],
 
