@@ -113,6 +113,15 @@ return [
                             ],
                         ],
                     ],
+                    'request-pickup' => [
+                        'type' => Literal::class,
+                        'options' => [
+                            'route' => '/request-pickup',
+                            'defaults' => [
+                                'action' => 'request-station-pickup',
+                            ],
+                        ],
+                    ],
                 ],
             ],
 
@@ -235,15 +244,54 @@ return [
                             ],
                         ]
                     ],
+                    'station-pickup' => [
+                        'type' => Segment::class,
+                        'options' => [
+                            'route' => '/station-pickup',
+                            'defaults' => [
+                                'controller' => Controller\Admin\StationPickupController::class,
+                            ],
+                        ],
+                        'child_routes' => [
+                            'reject' => [
+                                'type' => Segment::class,
+                                'options' => [
+                                    'route' => '/:pickupRequestId/reject',
+                                    'defaults' => [
+                                        'action' => 'reject'
+                                    ],
+                                ],
+                            ],
+                            'accept' => [
+                                'type' => Segment::class,
+                                'options' => [
+                                    'route' => '/:pickupRequestId/accept',
+                                    'defaults' => [
+                                        'action' => 'accept'
+                                    ],
+                                ],
+                            ],
+                        ]
+                    ],
                 ],
             ],
-            'travel-reimbursement' => [
+            'travel-reimbursements' => [
                 'type' => Literal::class,
                 'options' => [
-                    'route' => '/travel-reimbursement',
+                    'route' => '/travel-reimbursements',
                     'defaults' => [
                         'action' => 'index',
                         'controller' => Controller\Admin\TravelReimbursementController::class,
+                    ],
+                ],
+            ],
+            'station-pickups' => [
+                'type' => Literal::class,
+                'options' => [
+                    'route' => '/station-pickups',
+                    'defaults' => [
+                        'action' => 'index',
+                        'controller' => Controller\Admin\StationPickupController::class,
                     ],
                 ],
             ],

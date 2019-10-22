@@ -16,7 +16,7 @@ class TravelReimbursement
     private const PAID = 'Paid';
     /**
      * @ORM\Id()
-     * @ORM\ManyToOne(targetEntity="ConferenceTools\Speakers\Domain\Dashboard\Entity\Speaker", inversedBy="talks")
+     * @ORM\ManyToOne(targetEntity="ConferenceTools\Speakers\Domain\Dashboard\Entity\Speaker", inversedBy="travelReimbursements")
      * @ORM\JoinColumn(name="speaker_id", referencedColumnName="identity")
      */
     private $speaker;

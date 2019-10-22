@@ -52,6 +52,16 @@ class MessageSubscriptions
             SpeakerCommand\PayTravelReimbursement::class => [
                 Speaker::class,
             ],
+            SpeakerCommand\RequestStationPickup::class => [
+                Speaker::class,
+            ],
+            SpeakerCommand\AcceptStationPickupRequest::class => [
+                Speaker::class,
+            ],
+            SpeakerCommand\RejectStationPickupRequest::class => [
+                Speaker::class,
+            ],
+
 
             SpeakerEvent\SpeakerWasInvited::class => [
                 UpdateWebsite::class,
@@ -86,6 +96,15 @@ class MessageSubscriptions
                 SpeakerProjector::class,
             ],
             SpeakerEvent\TravelReimbursementPaid::class => [
+                SpeakerProjector::class,
+            ],
+            SpeakerEvent\StationPickupRequested::class => [
+                SpeakerProjector::class,
+            ],
+            SpeakerEvent\StationPickupAccepted::class => [
+                SpeakerProjector::class,
+            ],
+            SpeakerEvent\StationPickupRejected::class => [
                 SpeakerProjector::class,
             ],
 

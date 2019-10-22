@@ -115,8 +115,37 @@ $speaker = $this->speaker
                 <div class="spur-card-title">Station pickups</div>
             </div>
             <div class="card-body ">
-                <p>Display info on station/airport pickups</p>
-                <a>Request station/airport pickup</a>
+                <table class="table table-in-card">
+                    <thead>
+                    <tr><th>Station</th><th>Pickup time</th><th>Status</th><th>Notes</th><th></th></tr>
+                    </thead>
+                    <tbody>
+                    <?php foreach ($speaker->getPickupRequests() as $pickupRequest): ?>
+                        <tr>
+                            <td><?=$pickupRequest->getStation()?></td>
+                            <td><?=$pickupRequest->getPickupTime()->format('Y/m/d H:i')?></td>
+                            <td><?=$pickupRequest->getStatus()?></td>
+                            <td>
+                                <?php if ($pickupRequest->getRequestNotes() !== ''): ?>
+                                    <p><?=$this->escapeHtml($pickupRequest->getRequestNotes())?></p>
+                                <?php endif?>
+                                <?php if ($pickupRequest->isRejected() && $pickupRequest->getRejectReason() !== ''): ?>
+                                    <p><?=$this->escapeHtml($pickupRequest->getRejectReason())?></p>
+                                <?php endif?>
+                                <?php if ($pickupRequest->isAccepted() && $pickupRequest->getAcceptNotes() !== ''): ?>
+                                    <p><?=$this->escapeHtml($pickupRequest->getAcceptNotes())?></p>
+                                <?php endif?>
+                            </td>
+                            <td>
+                                <?php if ($pickupRequest->isRequested()):?>
+                                    <a class="btn btn-primary" href="<?=$this->url('speakers/speaker/station-pickup/accept', ['pickupRequestId' => $pickupRequest->getPickupRequestId(), 'speakerId' => $speaker->getIdentity()])?>">Accept</a>
+                                    <a class="btn btn-danger" href="<?=$this->url('speakers/speaker/station-pickup/reject', ['pickupRequestId' => $pickupRequest->getPickupRequestId(), 'speakerId' => $speaker->getIdentity()])?>">Reject</a>
+                                <?php endif?>
+                            </td>
+                        </tr>
+                    <?php endforeach;?>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

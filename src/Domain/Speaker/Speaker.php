@@ -2,10 +2,16 @@
 
 namespace ConferenceTools\Speakers\Domain\Speaker;
 
+use ConferenceTools\Speakers\Domain\Speaker\Command\AcceptStationPickupRequest;
 use ConferenceTools\Speakers\Domain\Speaker\Command\AcceptTravelReimbursement;
 use ConferenceTools\Speakers\Domain\Speaker\Command\PayTravelReimbursement;
+use ConferenceTools\Speakers\Domain\Speaker\Command\RejectStationPickupRequest;
 use ConferenceTools\Speakers\Domain\Speaker\Command\RejectTravelReimbursement;
+use ConferenceTools\Speakers\Domain\Speaker\Command\RequestStationPickup;
 use ConferenceTools\Speakers\Domain\Speaker\Command\RequestTravelReimbursement;
+use ConferenceTools\Speakers\Domain\Speaker\Event\StationPickupAccepted;
+use ConferenceTools\Speakers\Domain\Speaker\Event\StationPickupRejected;
+use ConferenceTools\Speakers\Domain\Speaker\Event\StationPickupRequested;
 use ConferenceTools\Speakers\Domain\Speaker\Event\TravelReimbursementAccepted;
 use ConferenceTools\Speakers\Domain\Speaker\Event\TravelReimbursementPaid;
 use ConferenceTools\Speakers\Domain\Speaker\Event\TravelReimbursementRejected;
@@ -35,6 +41,9 @@ class Speaker extends AbstractActor
     private const REIMBURSEMENT_REJECTED = 'reimbursement-rejected';
     private const REIMBURSEMENT_ACCEPTED = 'reimbursement-accepted';
     private const REIMBURSEMENT_PAID = 'reimbursement-paid';
+    const PICKUP_REQUESTED = 'pickup-requested';
+    const PICKUP_REJECTED = 'pickup-rejected';
+    const PICKUP_ACCEPTED = 'pickup-accepted';
 
     private $email;
     private $name;
@@ -43,6 +52,7 @@ class Speaker extends AbstractActor
     private $accepted;
     private $journeys;
     private $travelReimbursementRequests = [];
+    private $stationPickups = [];
 
     protected function handleInviteToSpeak(InviteToSpeak $command)
     {
@@ -148,11 +158,6 @@ class Speaker extends AbstractActor
      * AccomodationBooked
      * +Declined, partially booked
      *
-     * TravelReimbursementRequest
-     * TravelReimbursementSent
-     * TravelReimbursementDeclined
-     * TravelReimbursementPartiallySent
-     *
      * SpeakerDinnerRSVP
      *
      * TicketBooked << convert to task? probably not needed inside this actor as info can be pulled into read model from external events
@@ -224,5 +229,47 @@ class Speaker extends AbstractActor
     protected function applyTravelReimbursementPaid(TravelReimbursementPaid $event)
     {
         $this->travelReimbursementRequests[$event->getReimbursementRequestId()] = self::REIMBURSEMENT_PAID;
+    }
+
+    protected function handleRequestStationPickup(RequestStationPickup $command)
+    {
+        $pickupRequestId = $this->generateIdentity();
+
+        $this->fire(new StationPickupRequested($this->id(), $pickupRequestId, $command->getStation(), $command->getPickupTime(), $command->getNotes()));
+    }
+
+    protected function applyStationPickupRequested(StationPickupRequested $event)
+    {
+        $this->stationPickups[$event->getPickupRequestId()] = self::PICKUP_REQUESTED;
+    }
+
+    protected function handleAcceptStationPickupRequest(AcceptStationPickupRequest $command)
+    {
+        if (
+            isset($this->stationPickups[$command->getPickupRequestId()]) &&
+            $this->stationPickups[$command->getPickupRequestId()] === self::PICKUP_REQUESTED
+        ) {
+            $this->fire(new StationPickupAccepted($command->getSpeakerId(), $command->getPickupRequestId(), $command->getNotes()));
+        }
+    }
+
+    protected function applyStationPickupAccepted(StationPickupAccepted $event)
+    {
+        $this->stationPickups[$event->getPickupRequestId()] = self::PICKUP_ACCEPTED;
+    }
+
+    protected function handleRejectStationPickupRequest(RejectStationPickupRequest $command)
+    {
+        if (
+            isset($this->stationPickups[$command->getPickupRequestId()]) &&
+            $this->stationPickups[$command->getPickupRequestId()] === self::PICKUP_REQUESTED
+        ) {
+            $this->fire(new StationPickupRejected($command->getSpeakerId(), $command->getPickupRequestId(), $command->getReason()));
+        }
+    }
+
+    protected function applyStationPickupRejected(StationPickupRejected $event)
+    {
+        $this->stationPickups[$event->getPickupRequestId()] = self::PICKUP_REJECTED;
     }
 }

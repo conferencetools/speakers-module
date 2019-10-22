@@ -40,6 +40,15 @@ class ProfileForm extends Form
             ],
         ]);
         $this->add(new Textarea('specialRequirements', ['label' => 'Accessibility requirements']));
-        $this->add(new Submit('submit', ['label' => 'Edit']));
+
+        $this->add([
+            'type' => Submit::class,
+            'options' => [
+                'label' => 'Edit',
+            ],
+            'attributes' => [
+                'class'=> 'btn-primary',
+            ],
+        ]);
     }
 }

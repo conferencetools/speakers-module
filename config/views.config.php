@@ -7,4 +7,5 @@ return [
     'speakers/admin/speaker/index' => $viewDir . 'admin/speaker/index.phtml',
     'speakers/admin/speaker/profile' => $viewDir . 'admin/speaker/profile.phtml',
     'speakers/admin/travel-reimbursement/index' => $viewDir . 'admin/travel-reimbursement/index.phtml',
+    'speakers/admin/station-pickup/index' => $viewDir . 'admin/station-pickup/index.phtml',
 ];

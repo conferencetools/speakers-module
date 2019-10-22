@@ -1,0 +1,38 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="card spur-card">
+            <div class="card-header">
+                <div class="spur-card-icon">
+                    <i class="fas fa-table"></i>
+                </div>
+                <div class="spur-card-title">Station Pickup Requests</div>
+            </div>
+            <div class="card-body ">
+                <table class="table table-in-card">
+                    <thead>
+                    <tr><th>Speaker</th><th>Station</th><th>Time</th><th>Status</th><th></th></tr>
+                    </thead>
+                    <tbody>
+                    <?php foreach ($this->stationPickups as $stationPickup): ?>
+                        <?php
+                        /** @var \ConferenceTools\Speakers\Domain\Dashboard\Entity\PickupRequest $stationPickup */
+                        $speaker = $stationPickup->getSpeaker();?>
+                        <tr>
+                            <td><a href="<?=$this->url('speakers/speaker', ['speakerId' => $speaker->getIdentity()])?>"><?=$this->escapeHtml($speaker->getName())?></a></td>
+                            <td><?=$stationPickup->getStation()?></td>
+                            <td><?=$stationPickup->getPickupTime()->format('Y/m/d H:i')?></td>
+                            <td><?=$stationPickup->getStatus()?></td>
+                            <td>
+                                <?php if ($stationPickup->isRequested()):?>
+                                    <a class="btn btn-primary" href="<?=$this->url('speakers/speaker/travel-reimbursement/accept', ['reimbursementRequestId' => $stationPickup->getReimbursementRequestId(), 'speakerId' => $speaker->getIdentity()])?>">Accept</a>
+                                    <a class="btn btn-danger" href="<?=$this->url('speakers/speaker/travel-reimbursement/reject', ['reimbursementRequestId' => $stationPickup->getReimbursementRequestId(), 'speakerId' => $speaker->getIdentity()])?>">Reject</a>
+                                <?php endif?>
+                            </td>
+                        </tr>
+                    <?php endforeach;?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

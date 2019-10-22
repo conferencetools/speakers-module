@@ -1,25 +1,35 @@
 <?php
 
-
 namespace ConferenceTools\Speakers\Form;
 
-
 use Zend\Form\Element\DateTime;
+use Zend\Form\Element\Radio;
 use Zend\Form\Element\Submit;
 use Zend\Form\Element\Text;
 use Zend\Form\Element\Textarea;
 use Zend\Form\Form;
 
-class ProvideTravelDetails extends Form
+class RequestStationPickupForm extends Form
 {
     public function init()
     {
-        $this->add(new Text('departFrom', ['label' => 'Depart from']));
+        $this->add([
+            'type' => Radio::class,
+            'name'=> 'station',
+            'options' => [
+                'label' => 'Location',
+                'value_options' => [
+                    'York Station' => 'York Station',
+                    'Leeds Bradford Airport' => 'Leeds Bradford Airport',
+                ],
+            ]
+        ]);
+
         $this->add([
             'type' => DateTime::class,
-            'name' => 'departureTime',
+            'name' => 'pickupTime',
             'options' => [
-                'label' => 'Departure time',
+                'label' => 'Pickup time',
             ],
             'attributes' => [
                 'class'=> 'datetimepicker-input',
@@ -29,26 +39,20 @@ class ProvideTravelDetails extends Form
                 'autocomplete' => 'off',
             ],
         ]);
-        $this->add(new Text('arriveAt', ['label' => 'Arrive at']));
+
         $this->add([
-            'type' => DateTime::class,
-            'name' => 'arrivalTime',
+            'type' => Textarea::class,
+            'name'=> 'notes',
             'options' => [
-                'label' => 'Arrival time',
-            ],
-            'attributes' => [
-                'class'=> 'datetimepicker-input',
-                'id' => "arrivalTime",
-                'data-toggle' => "datetimepicker",
-                'data-target' => "#arrivalTime",
-                'autocomplete' => 'off',
-            ],
+                'label' => 'Notes',
+                'help-block' => 'Any additional details we need to be aware of. Please do not enter payment details in this field.'
+            ]
         ]);
-        $this->add(new Textarea('notes', ['label' => 'Notes']));
+
         $this->add([
             'type' => Submit::class,
             'options' => [
-                'label' => 'Save',
+                'label' => 'Request',
             ],
             'attributes' => [
                 'class'=> 'btn-primary',

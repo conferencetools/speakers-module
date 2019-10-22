@@ -29,6 +29,14 @@ class RequestTravelReimbursementForm extends Form
             ]
         ]);
 
-        $this->add(new Submit('submit', ['label' => 'Request']));
+        $this->add([
+            'type' => Submit::class,
+            'options' => [
+                'label' => 'Request',
+            ],
+            'attributes' => [
+                'class'=> 'btn-primary',
+            ],
+        ]);
     }
 }

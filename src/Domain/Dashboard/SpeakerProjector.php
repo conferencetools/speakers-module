@@ -2,6 +2,9 @@
 
 namespace ConferenceTools\Speakers\Domain\Dashboard;
 
+use ConferenceTools\Speakers\Domain\Speaker\Event\StationPickupAccepted;
+use ConferenceTools\Speakers\Domain\Speaker\Event\StationPickupRejected;
+use ConferenceTools\Speakers\Domain\Speaker\Event\StationPickupRequested;
 use ConferenceTools\Speakers\Domain\Speaker\Event\TalkWasCancelled;
 use ConferenceTools\Speakers\Domain\Speaker\Event\TravelReimbursementAccepted;
 use ConferenceTools\Speakers\Domain\Speaker\Event\TravelReimbursementPaid;
@@ -60,6 +63,16 @@ class SpeakerProjector implements Handler
                 break;
             case $message instanceof TravelReimbursementRejected:
                 $this->travelReimbursementRejected($message);
+                break;
+
+            case $message instanceof StationPickupRequested:
+                $this->pickupRequested($message);
+                break;
+            case $message instanceof StationPickupRejected:
+                $this->pickupRejected($message);
+                break;
+            case $message instanceof StationPickupAccepted:
+                $this->pickupAccepted($message);
                 break;
         }
 
@@ -140,5 +153,25 @@ class SpeakerProjector implements Handler
         $speaker = $this->fetchSpeaker($message->getSpeakerId());
         $travelReimbursement = $speaker->getTravelReimbursement($message->getReimbursementRequestId());
         $travelReimbursement->pay($message->getNotes());
+    }
+
+    private function pickupRequested(StationPickupRequested $message)
+    {
+        $speaker = $this->fetchSpeaker($message->getSpeakerId());
+        $speaker->addPickupRequest($message->getPickupRequestId(), $message->getStation(), $message->getPickupTime(), $message->getNotes());
+    }
+
+    private function pickupAccepted(StationPickupAccepted $message)
+    {
+        $speaker = $this->fetchSpeaker($message->getSpeakerId());
+        $pickupRequest = $speaker->getPickupRequest($message->getPickupRequestId());
+        $pickupRequest->accept($message->getNotes());
+    }
+
+    private function pickupRejected(StationPickupRejected $message)
+    {
+        $speaker = $this->fetchSpeaker($message->getSpeakerId());
+        $pickupRequest = $speaker->getPickupRequest($message->getPickupRequestId());
+        $pickupRequest->reject($message->getReason());
     }
 }

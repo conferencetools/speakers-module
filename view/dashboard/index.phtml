@@ -139,7 +139,6 @@ $speaker = $this->speaker
                     </tbody>
                 </table>
                 <a class="btn btn-primary mt-4" href="<?=$this->url('speakers/travel/request-reimbursement', ['speakerId' => $speaker->getIdentity()])?>">Request travel reimbursement</a>
-                <a></a>
             </div>
         </div>
     </div>
@@ -152,8 +151,43 @@ $speaker = $this->speaker
                 <div class="spur-card-title">Station pickups</div>
             </div>
             <div class="card-body ">
-                <p>Display info on station/airport pickups</p>
-                <a>Request station/airport pickup</a>
+                <p>
+                    If you are arriving at either Leeds Bradford airport or York train station, we can organise a pickup for you. Where possible this will be a member
+                    of the PHP Yorkshire team, however as this is a small group of people, this is not always possible.
+                </p>
+                <p>
+                    If we are unable to make it to a pickup ourselves, we will reject the request. You then have two options, either submit a
+                    second request and we'll arrange for a taxi to pick you up or you can arrange your own taxi upon arrival.
+                    If you book your own taxi please keep the reciept so that we can refund the cost.
+                </p>
+
+                <table class="table table-in-card">
+                    <thead>
+                    <tr><th>Station</th><th>Pickup time</th><th>Status</th><th>Notes</th></tr>
+                    </thead>
+                    <tbody>
+                    <?php foreach ($speaker->getPickupRequests() as $pickupRequest): ?>
+                        <tr>
+                            <td><?=$pickupRequest->getStation()?></td>
+                            <td><?=$pickupRequest->getPickupTime()->format('Y/m/d H:i')?></td>
+                            <td><?=$pickupRequest->getStatus()?></td>
+                            <td>
+                                <?php if ($pickupRequest->getRequestNotes() !== ''): ?>
+                                    <p><?=$this->escapeHtml($pickupRequest->getRequestNotes())?></p>
+                                <?php endif?>
+                                <?php if ($pickupRequest->isRejected() && $pickupRequest->getRejectReason() !== ''): ?>
+                                    <p><?=$this->escapeHtml($pickupRequest->getRejectReason())?></p>
+                                <?php endif?>
+                                <?php if ($pickupRequest->isAccepted() && $pickupRequest->getAcceptNotes() !== ''): ?>
+                                    <p><?=$this->escapeHtml($pickupRequest->getAcceptNotes())?></p>
+                                <?php endif?>
+                            </td>
+                        </tr>
+                    <?php endforeach;?>
+                    </tbody>
+                </table>
+
+                <a class="btn btn-primary mt-4" href="<?=$this->url('speakers/travel/request-pickup', ['speakerId' => $speaker->getIdentity()])?>">Request station/airport pickup</a>
             </div>
         </div>
     </div>

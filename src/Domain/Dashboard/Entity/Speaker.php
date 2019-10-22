@@ -89,6 +89,18 @@ class Speaker
      */
     private $travelReimbursements;
     /**
+     * @var PickupRequest[]|ArrayCollection
+     *
+     * @ORM\OneToMany(
+     *     targetEntity="ConferenceTools\Speakers\Domain\Dashboard\Entity\PickupRequest",
+     *     mappedBy="speaker",
+     *     indexBy="pickupRequestId",
+     *     cascade={"persist", "remove"},
+     *     orphanRemoval=true
+     *     )
+     */
+    private $pickupRequests;
+    /**
      * @ORM\Column(type="string", nullable=true)
      */
     private $preference;
@@ -241,5 +253,21 @@ class Speaker
     public function getTravelReimbursement(string $id): TravelReimbursement
     {
         return $this->travelReimbursements->get($id);
+    }
+
+    public function addPickupRequest(string $pickupRequestId, string $station, \DateTime $pickupTime, string $notes)
+    {
+        $pickupRequest = new PickupRequest($this, $pickupRequestId, $station, $pickupTime, $notes);
+        $this->pickupRequests->add($pickupRequest);
+    }
+
+    public function getPickupRequests()
+    {
+        return $this->pickupRequests;
+    }
+
+    public function getPickupRequest(string $id): PickupRequest
+    {
+        return $this->pickupRequests->get($id);
     }
 }

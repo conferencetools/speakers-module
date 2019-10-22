@@ -14,8 +14,12 @@ return [
                     'route' => 'speakers/import',
                 ],
                 [
-                    'label' => 'Travel Reimbursement',
-                    'route' => 'speakers/travel-reimbursement',
+                    'label' => 'Travel Reimbursements',
+                    'route' => 'speakers/travel-reimbursements',
+                ],
+                [
+                    'label' => 'Station Pickups',
+                    'route' => 'speakers/station-pickups',
                 ],
             ],
         ],
