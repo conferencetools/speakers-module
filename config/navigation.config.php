@@ -22,6 +22,10 @@ return [
                     'label' => 'Station Pickups',
                     'route' => 'speakers/station-pickups',
                 ],
+                [
+                    'label' => 'Hotel Bookings',
+                    'route' => 'speakers/hotel-bookings',
+                ],
             ],
         ],
     ],

@@ -162,12 +162,20 @@ $speaker = $this->speaker
             </div>
             <div class="card-body ">
                 <?php if ($speaker->hasRequestedAccommodation()):?>
-                    <?php $requestedDates = $speaker->getAccommodation();?>
+                    <?php
+                        $requestedDates = $speaker->getAccommodation();
+                        $outstandingRequests = false;
+                    ?>
                     <dl>
                         <?php foreach ($this->hotelDates as $date => $text):?>
                             <dt><?=$text?></dt><dd><?=(!isset($requestedDates[$date])?'Available':$requestedDates[$date])?></dd>
+                            <?php $outstandingRequests |= ($requestedDates[$date] === \ConferenceTools\Speakers\Domain\Dashboard\Entity\Speaker::ACCOMMODATION_REQUESTED) ?>
+
                         <?php endforeach; ?>
                     </dl>
+                    <?php if ($outstandingRequests):?>
+                        <a class="btn btn-primary mt-4" href="<?=$this->url('speakers/speaker/hotel', ['speakerId' => $speaker->getIdentity()])?>">Book Rooms</a>
+                    <?php endif?>
                 <?php else:?>
                     <p>No booking requested yet</p>
                 <?php endif?>

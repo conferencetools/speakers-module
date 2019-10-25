@@ -10,6 +10,7 @@ return [
         Controller\Admin\TalkController::class => InvokableFactory::class,
         Controller\Admin\TravelReimbursementController::class => InvokableFactory::class,
         Controller\Admin\StationPickupController::class => InvokableFactory::class,
+        Controller\Admin\HotelController::class => InvokableFactory::class,
         Controller\DashboardController::class => InvokableFactory::class,
         Controller\InvitationController::class => InvokableFactory::class,
         Controller\ProfileController::class => InvokableFactory::class,

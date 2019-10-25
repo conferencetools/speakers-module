@@ -10,7 +10,7 @@ return [
         'type' => Placeholder::class,
         'options' => [
             'defaults' => [
-                'layout' => 'admin/layout',
+                'layout' => 'speakers/layout',
                 'requiresAuth' => true,
             ]
         ],
@@ -156,6 +156,7 @@ return [
                         'action' => 'index',
                         'controller' => Controller\Admin\SpeakerController::class,
                         'requiresPermission' => 'speaker-organiser',
+                        'layout' => 'admin/layout',
                     ],
                 ],
             ],
@@ -167,6 +168,7 @@ return [
                         'action' => 'profile',
                         'controller' => Controller\Admin\SpeakerController::class,
                         'requiresPermission' => 'speaker-organiser',
+                        'layout' => 'admin/layout',
                     ],
                 ],
                 'may_terminate' => true,
@@ -285,6 +287,28 @@ return [
                             ],
                         ]
                     ],
+                    'hotel' => [
+                        'type' => Literal::class,
+                        'options' => [
+                            'route' => '/hotel',
+                            'defaults' => [
+                                'action' => 'make-booking',
+                                'controller' => Controller\Admin\HotelController::class,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'hotel-bookings' => [
+                'type' => Literal::class,
+                'options' => [
+                    'route' => '/hotel-bookings',
+                    'defaults' => [
+                        'action' => 'index',
+                        'controller' => Controller\Admin\HotelController::class,
+                        'requiresPermission' => 'speaker-organiser',
+                        'layout' => 'admin/layout',
+                    ],
                 ],
             ],
             'travel-reimbursements' => [
@@ -295,6 +319,7 @@ return [
                         'action' => 'index',
                         'controller' => Controller\Admin\TravelReimbursementController::class,
                         'requiresPermission' => 'speaker-organiser',
+                        'layout' => 'admin/layout',
                     ],
                 ],
             ],
@@ -306,6 +331,7 @@ return [
                         'action' => 'index',
                         'controller' => Controller\Admin\StationPickupController::class,
                         'requiresPermission' => 'speaker-organiser',
+                        'layout' => 'admin/layout',
                     ],
                 ],
             ],

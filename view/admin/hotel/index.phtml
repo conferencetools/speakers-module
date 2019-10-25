@@ -1,0 +1,58 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="card spur-card">
+            <div class="card-header">
+                <div class="spur-card-icon">
+                    <i class="fas fa-table"></i>
+                </div>
+                <div class="spur-card-title">Hotel Room bookings</div>
+            </div>
+            <div class="card-body ">
+                <table class="table table-in-card">
+                    <thead>
+                    <tr>
+                        <th>Speaker</th>
+                        <?php foreach ($this->hotelDates as $heading):?>
+                            <th><?=$heading?></th>
+                        <?php endforeach;?>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php foreach ($this->speakers as $speaker): ?>
+                        <?php
+                        /** @var \ConferenceTools\Speakers\Domain\Dashboard\Entity\Speaker $speaker */
+                        ?>
+                        <tr>
+                            <td><a href="<?=$this->url('speakers/speaker', ['speakerId' => $speaker->getIdentity()])?>"><?=$this->escapeHtml($speaker->getName())?></a></td>
+                            <?php
+                                $speakerBookings = $speaker->getAccommodation();
+                                $outstandingRequests = false;
+                            ?>
+                            <?php foreach($this->hotelDates as $date => $_):?>
+                                <td>
+                                    <?php if ($speaker->hasRequestedAccommodation()):?>
+                                        <?php if (isset($speakerBookings[$date])):?>
+                                            <?=$speakerBookings[$date] ?>
+                                            <?php $outstandingRequests |= ($speakerBookings[$date] === \ConferenceTools\Speakers\Domain\Dashboard\Entity\Speaker::ACCOMMODATION_REQUESTED) ?>
+                                        <?php else:?>
+                                            Not Requested
+                                        <?php endif?>
+                                    <?php else: ?>
+                                        No response
+                                    <?php endif?>
+                                </td>
+                            <?php endforeach;?>
+                            <td>
+                                <?php if ($outstandingRequests):?>
+                                    <a class="btn btn-primary" href="<?=$this->url('speakers/speaker/hotel', ['speakerId' => $speaker->getIdentity()])?>">Book Rooms</a>
+                                <?php endif?>
+                            </td>
+                        </tr>
+                    <?php endforeach;?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -65,7 +65,7 @@ class SpeakerController extends AppController
                 $this->messageBus()->fire($command);
 
                 $this->flashMessenger()->addSuccessMessage('Profile updated');
-                $this->redirect()->toRoute('speakers/speaker', ['speakerId' => $speaker->getIdentity()]);
+                return $this->redirect()->toRoute('speakers/speaker', ['speakerId' => $speaker->getIdentity()]);
             }
         }
 
