@@ -4,6 +4,7 @@ return [
         [
             'label' => 'Speakers',
             'uri' => '',
+            'permission' => 'speaker-organiser',
             'pages' => [
                 [
                     'label' => 'List',

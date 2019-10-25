@@ -31,10 +31,11 @@ class ImportController extends AppController
             if ($form->isValid()) {
                 $data = $form->getData();
                 $this->importFile($data['upload']);
+                $this->redirect()->toRoute('speakers/speakers');
             }
         }
 
-        $viewModel = new ViewModel(['form' => $form]);
+        $viewModel = new ViewModel(['form' => $form, 'action' => 'Import speakers']);
         $viewModel->setTemplate('admin/form');
         return $viewModel;
     }

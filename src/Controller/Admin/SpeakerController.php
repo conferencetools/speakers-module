@@ -23,8 +23,12 @@ class SpeakerController extends AppController
     public function profileAction()
     {
         $speaker = $this->fetchSpeaker();
-
-        return new ViewModel(['speaker' => $speaker]);
+        $availableDates = [
+            '2020-04-02' => 'Thursday 2nd of April',
+            '2020-04-03' => 'Friday 3rd of April',
+            '2020-04-04' => 'Saturday 4th April'
+        ];
+        return new ViewModel(['speaker' => $speaker, 'hotelDates' => $availableDates]);
     }
 
     public function editAction()

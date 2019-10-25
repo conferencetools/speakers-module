@@ -61,6 +61,12 @@ class MessageSubscriptions
             SpeakerCommand\RejectStationPickupRequest::class => [
                 Speaker::class,
             ],
+            SpeakerCommand\RequestAccommodation::class => [
+                Speaker::class,
+            ],
+            SpeakerCommand\BookAccommodation::class => [
+                Speaker::class,
+            ],
 
 
             SpeakerEvent\SpeakerWasInvited::class => [
@@ -107,6 +113,13 @@ class MessageSubscriptions
             SpeakerEvent\StationPickupRejected::class => [
                 SpeakerProjector::class,
             ],
+            SpeakerEvent\AccommodationBooked::class => [
+                SpeakerProjector::class,
+            ],
+            SpeakerEvent\AccommodationRequested::class => [
+                SpeakerProjector::class,
+            ],
+
 
             TaskCommand\CompleteTask::class => [
                 ClearTaskHandler::class,

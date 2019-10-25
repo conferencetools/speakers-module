@@ -2,6 +2,8 @@
 
 namespace ConferenceTools\Speakers\Domain\Dashboard;
 
+use ConferenceTools\Speakers\Domain\Speaker\Event\AccommodationBooked;
+use ConferenceTools\Speakers\Domain\Speaker\Event\AccommodationRequested;
 use ConferenceTools\Speakers\Domain\Speaker\Event\StationPickupAccepted;
 use ConferenceTools\Speakers\Domain\Speaker\Event\StationPickupRejected;
 use ConferenceTools\Speakers\Domain\Speaker\Event\StationPickupRequested;
@@ -74,6 +76,12 @@ class SpeakerProjector implements Handler
             case $message instanceof StationPickupAccepted:
                 $this->pickupAccepted($message);
                 break;
+
+            case $message instanceof AccommodationRequested:
+                $this->accommodationRequested($message);
+                break;
+            case $message instanceof AccommodationBooked:
+                $this->accommodationBooked($message);
         }
 
         $this->repository->commit();
@@ -173,5 +181,17 @@ class SpeakerProjector implements Handler
         $speaker = $this->fetchSpeaker($message->getSpeakerId());
         $pickupRequest = $speaker->getPickupRequest($message->getPickupRequestId());
         $pickupRequest->reject($message->getReason());
+    }
+
+    private function accommodationRequested(AccommodationRequested $message)
+    {
+        $speaker = $this->fetchSpeaker($message->getSpeakerId());
+        $speaker->accommodationRequested(...$message->getDates());
+    }
+
+    private function accommodationBooked(AccommodationBooked $message)
+    {
+        $speaker = $this->fetchSpeaker($message->getSpeakerId());
+        $speaker->accommodationBooked(...$message->getDates());
     }
 }

@@ -16,6 +16,8 @@ use Doctrine\ORM\Mapping as ORM;
 */
 class Speaker
 {
+    const ACCOMMODATION_REQUESTED = 'Requested';
+    const ACCOMMODATION_BOOKED = 'Booked';
     /**
      * @ORM\Id @ORM\Column(type="string")
      */
@@ -108,6 +110,10 @@ class Speaker
      * @ORM\Column(type="string")
      */
     private $allergies = '';
+    /** @ORM\Column(type="json_array") */
+    private $accommodation = [];
+    /** @ORM\Column(type="boolean") */
+    private $accommodationRequested = false;
 
 
     public function __construct(string $identity, string $name, Email $email, Bio $bio)
@@ -121,6 +127,7 @@ class Speaker
         $this->talks = new ArrayCollection();
         $this->journeys = new ArrayCollection();
         $this->travelReimbursements = new ArrayCollection();
+        $this->pickupRequests = new ArrayCollection();
     }
 
     public function getIdentity()
@@ -269,5 +276,33 @@ class Speaker
     public function getPickupRequest(string $id): PickupRequest
     {
         return $this->pickupRequests->get($id);
+    }
+
+    public function accommodationRequested(string ...$dates): void
+    {
+        $this->accommodationRequested = true;
+        foreach ($dates as $date) {
+            if (!isset($this->accomodation[$date])) {
+                $this->accommodation[$date] = self::ACCOMMODATION_REQUESTED;
+            }
+        }
+    }
+
+    public function accommodationBooked(string ...$dates): void
+    {
+        $this->accommodationRequested = true;
+        foreach ($dates as $date) {
+            $this->accommodation[$date] = self::ACCOMMODATION_BOOKED;
+        }
+    }
+
+    public function getAccommodation(): array
+    {
+        return $this->accommodation;
+    }
+
+    public function hasRequestedAccommodation(): bool
+    {
+        return $this->accommodationRequested;
     }
 }

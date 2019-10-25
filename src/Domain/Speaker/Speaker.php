@@ -4,11 +4,15 @@ namespace ConferenceTools\Speakers\Domain\Speaker;
 
 use ConferenceTools\Speakers\Domain\Speaker\Command\AcceptStationPickupRequest;
 use ConferenceTools\Speakers\Domain\Speaker\Command\AcceptTravelReimbursement;
+use ConferenceTools\Speakers\Domain\Speaker\Command\BookAccommodation;
 use ConferenceTools\Speakers\Domain\Speaker\Command\PayTravelReimbursement;
 use ConferenceTools\Speakers\Domain\Speaker\Command\RejectStationPickupRequest;
 use ConferenceTools\Speakers\Domain\Speaker\Command\RejectTravelReimbursement;
+use ConferenceTools\Speakers\Domain\Speaker\Command\RequestAccommodation;
 use ConferenceTools\Speakers\Domain\Speaker\Command\RequestStationPickup;
 use ConferenceTools\Speakers\Domain\Speaker\Command\RequestTravelReimbursement;
+use ConferenceTools\Speakers\Domain\Speaker\Event\AccommodationBooked;
+use ConferenceTools\Speakers\Domain\Speaker\Event\AccommodationRequested;
 use ConferenceTools\Speakers\Domain\Speaker\Event\StationPickupAccepted;
 use ConferenceTools\Speakers\Domain\Speaker\Event\StationPickupRejected;
 use ConferenceTools\Speakers\Domain\Speaker\Event\StationPickupRequested;
@@ -44,6 +48,8 @@ class Speaker extends AbstractActor
     const PICKUP_REQUESTED = 'pickup-requested';
     const PICKUP_REJECTED = 'pickup-rejected';
     const PICKUP_ACCEPTED = 'pickup-accepted';
+    const ACCOMMODATION_REQUESTED = 'accommodation-requested';
+    const ACCOMMODATION_BOOKED = 'accommodation-booked';
 
     private $email;
     private $name;
@@ -53,6 +59,7 @@ class Speaker extends AbstractActor
     private $journeys;
     private $travelReimbursementRequests = [];
     private $stationPickups = [];
+    private $accomodation = [];
 
     protected function handleInviteToSpeak(InviteToSpeak $command)
     {
@@ -148,21 +155,6 @@ class Speaker extends AbstractActor
             $command->getDietaryRequirements()
         ));
     }
-
-    /**
-     * @TODO
-     * Add talk type as a string description (not editable)
-     * CancelAttendance
-     *
-     * AccomodationRequest
-     * AccomodationBooked
-     * +Declined, partially booked
-     *
-     * SpeakerDinnerRSVP
-     *
-     * TicketBooked << convert to task? probably not needed inside this actor as info can be pulled into read model from external events
-     * Ticket booking (on accept, update delegate info when info here changes)
-     */
 
     protected function handleProvideJourneyDetails(ProvideJourneyDetails $command)
     {
@@ -271,5 +263,48 @@ class Speaker extends AbstractActor
     protected function applyStationPickupRejected(StationPickupRejected $event)
     {
         $this->stationPickups[$event->getPickupRequestId()] = self::PICKUP_REJECTED;
+    }
+
+    /**
+     * @TODO
+     * Add talk type as a string description (not editable)
+     * CancelAttendance
+     *
+     * AccomodationRequest
+     * AccomodationBooked
+     * +Declined, partially booked
+     *
+     * SpeakerDinnerRSVP
+     *
+     * TicketBooked << convert to task? probably not needed inside this actor as info can be pulled into read model from external events
+     * Ticket booking (on accept, update delegate info when info here changes)
+     */
+
+    protected function handleRequestAccommodation(RequestAccommodation $command)
+    {
+        $this->fire(new AccommodationRequested($this->id(), ...$command->getDates()));
+    }
+
+    protected function applyAccommodationRequested(AccommodationRequested $event)
+    {
+        foreach ($event->getDates() as $date) {
+            if (!isset($this->accomodation[$date])) {
+                $this->accomodation[$date] = self::ACCOMMODATION_REQUESTED;
+            }
+        }
+    }
+
+    protected function handleBookAccommodation(BookAccommodation $command)
+    {
+        $this->fire(new AccommodationBooked($this->id(), ...$command->getDates()));
+    }
+
+    protected function applyAccommodationBooked(AccommodationBooked $event)
+    {
+        foreach ($event->getDates() as $date) {
+            if (isset($this->accomodation[$date])) {
+                $this->accomodation[$date] = self::ACCOMMODATION_BOOKED;
+            }
+        }
     }
 }

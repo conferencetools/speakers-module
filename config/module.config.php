@@ -4,7 +4,12 @@ return [
     'auth' => [
         'permissions' => [
             'speaker' => 'Can edit own speaker info',
-
+            'speaker-organiser' => 'Can manage all speakers',
+        ],
+        'redirects' => [
+            'byPermission' => [
+                'speaker' => 'speakers/dashboard'
+            ]
         ]
     ],
     'controllers' => require __DIR__ . '/controllers.config.php',

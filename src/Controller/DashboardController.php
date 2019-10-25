@@ -35,6 +35,13 @@ class DashboardController extends AppController
             return $this->redirect()->toRoute('speakers/invitation', ['speakerId' => $speakerId]);
         }
 
-        return new ViewModel(['speaker' => $speaker]);
+        //@TODO pull from config or db
+        $availableDates = [
+            '2020-04-02' => 'Thursday 2nd of April',
+            '2020-04-03' => 'Friday 3rd of April',
+            '2020-04-04' => 'Saturday 4th April'
+        ];
+
+        return new ViewModel(['speaker' => $speaker, 'hotelDates' => $availableDates]);
     }
 }

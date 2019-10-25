@@ -89,7 +89,7 @@ return [
             'travel' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/travel/:speakerId',
+                    'route' => '/travel',
                     'defaults' => [
                         'controller' => Controller\TravelController::class,
                     ],
@@ -124,6 +124,16 @@ return [
                     ],
                 ],
             ],
+            'hotel' => [
+                'type' => Literal::class,
+                'options' => [
+                    'route' => '/hotel',
+                    'defaults' => [
+                        'action' => 'alter-booking',
+                        'controller' => Controller\HotelController::class,
+                    ],
+                ],
+            ],
 
             'dashboard' => [
                 'type' => Literal::class,
@@ -145,6 +155,7 @@ return [
                     'defaults' => [
                         'action' => 'index',
                         'controller' => Controller\Admin\SpeakerController::class,
+                        'requiresPermission' => 'speaker-organiser',
                     ],
                 ],
             ],
@@ -155,6 +166,7 @@ return [
                     'defaults' => [
                         'action' => 'profile',
                         'controller' => Controller\Admin\SpeakerController::class,
+                        'requiresPermission' => 'speaker-organiser',
                     ],
                 ],
                 'may_terminate' => true,
@@ -282,6 +294,7 @@ return [
                     'defaults' => [
                         'action' => 'index',
                         'controller' => Controller\Admin\TravelReimbursementController::class,
+                        'requiresPermission' => 'speaker-organiser',
                     ],
                 ],
             ],
@@ -292,6 +305,7 @@ return [
                     'defaults' => [
                         'action' => 'index',
                         'controller' => Controller\Admin\StationPickupController::class,
+                        'requiresPermission' => 'speaker-organiser',
                     ],
                 ],
             ],

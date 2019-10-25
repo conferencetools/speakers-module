@@ -15,5 +15,6 @@ return [
         Controller\ProfileController::class => InvokableFactory::class,
         Controller\TalkController::class => InvokableFactory::class,
         Controller\TravelController::class => InvokableFactory::class,
+        Controller\HotelController::class => InvokableFactory::class,
     ]
 ];

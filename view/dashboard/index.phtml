@@ -209,8 +209,30 @@ $speaker = $this->speaker
                     <dt>Accommodation phone number</dt><dd></dd>
                     <dt>Nights booked</dt><dd></dd>
                 </dl>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card spur-card">
+            <div class="card-header">
+                <div class="spur-card-icon">
+                    <i class="fas fa-table"></i>
+                </div>
+                <div class="spur-card-title">Accommodation booking</div>
+            </div>
+            <div class="card-body ">
+                <?php if ($speaker->hasRequestedAccommodation()):?>
+                <?php $requestedDates = $speaker->getAccommodation();?>
+                <dl>
+                    <?php foreach ($this->hotelDates as $date => $text):?>
+                        <dt><?=$text?></dt><dd><?=(!isset($requestedDates[$date])?'Available':$requestedDates[$date])?></dd>
+                    <?php endforeach; ?>
+                </dl>
+                <?php else:?>
+                <p>No booking requested yet</p>
+                <?php endif?>
 
-                <a>Request booking</a>
+                <a class="btn btn-primary mt-4" href="<?=$this->url('speakers/hotel')?>">Book nights</a>
             </div>
         </div>
     </div>
