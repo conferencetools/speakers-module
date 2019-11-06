@@ -18,19 +18,14 @@ class InviteToSpeak
      */
     private $email;
     /**
-     * @Jms\Type("array<ConferenceTools\Speakers\Domain\Speaker\Talk>")
-     */
-    private $talks;
-    /**
      * @Jms\Type("ConferenceTools\Speakers\Domain\Speaker\Bio")
      */
     private $bio;
 
-    public function __construct(string $name, Bio $bio, Email $email, Talk ...$talks)
+    public function __construct(string $name, Bio $bio, Email $email)
     {
         $this->name = $name;
         $this->email = $email;
-        $this->talks = $talks;
         $this->bio = $bio;
     }
 
@@ -42,11 +37,6 @@ class InviteToSpeak
     public function getEmail(): Email
     {
         return $this->email;
-    }
-
-    public function getTalks(): array
-    {
-        return $this->talks;
     }
 
     public function getBio(): Bio

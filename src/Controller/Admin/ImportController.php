@@ -7,8 +7,10 @@ use ConferenceTools\Authentication\Domain\User\Command\CreateNewUser;
 use ConferenceTools\Authentication\Domain\User\HashedPassword;
 use ConferenceTools\Speakers\Controller\AppController;
 use ConferenceTools\Speakers\Domain\Speaker\Bio;
+use ConferenceTools\Speakers\Domain\Speaker\Command\AddAdditionalTalk;
 use ConferenceTools\Speakers\Domain\Speaker\Command\InviteToSpeak;
 use ConferenceTools\Speakers\Domain\Speaker\Email;
+use ConferenceTools\Speakers\Domain\Speaker\Event\SpeakerWasInvited;
 use ConferenceTools\Speakers\Domain\Speaker\Talk;
 use Zend\Form\Element\File;
 use Zend\Form\Element\Submit;
@@ -24,7 +26,15 @@ class ImportController extends AppController
 
         $form = new Form();
         $form->add(new File('upload', ['label' => 'Speakers json file']));
-        $form->add(new Submit('submit', ['label' => 'Upload']));
+        $form->add([
+            'type' => Submit::class,
+            'options' => [
+                'label' => 'Upload',
+            ],
+            'attributes' => [
+                'class'=> 'btn-primary',
+            ],
+        ]);
 
         if ($this->getRequest()->isPost()) {
             $form->setData(\array_merge($this->params()->fromFiles(), $this->params()->fromPost()));
@@ -52,9 +62,15 @@ class ImportController extends AppController
 
         foreach ($speakerData AS $speaker) {
 
+            if (isset($speaker['password'])) {
+                $password = HashedPassword::fromHash($speaker['password']);
+            } else {
+                $password = new HashedPassword('Password1');
+            }
+
             $command = new CreateNewUser(
                 $speaker['email'],
-                new HashedPassword('Password1') //@TODO generate randomly and email to speaker later
+               $password
             );
 
             $this->messageBus()->fire($command);
@@ -63,19 +79,22 @@ class ImportController extends AppController
 
             $this->messageBus()->fire($command);
 
-            $talks = [];
-            foreach ($speaker['talks'] as $talk) {
-                $talks[] = new Talk($talk['title'], $talk['abstract']);
-            }
-
-            $this->messageBus()->fire(
+            $messages = $this->messageBus()->fire(
                 new InviteToSpeak(
                     $speaker['name'],
                     new Bio($speaker['profile'], $speaker['twitter'], $speaker['company']),
-                    new Email($speaker['email']),
-                    ...$talks
+                    new Email($speaker['email'])
                 )
             );
+
+            $speakerId = $this->messageBus()->firstInstanceOf(SpeakerWasInvited::class, ...$messages)->getIdentity();
+
+            if (isset($speaker['talks']) && is_array($speaker['talks'])) {
+                foreach ($speaker['talks'] as $talk) {
+                    $command = new AddAdditionalTalk($speakerId, new Talk($talk['title'], $talk['abstract']));
+                    $this->messageBus()->fire($command);
+                }
+            }
         }
     }
 }

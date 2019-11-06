@@ -4,6 +4,7 @@ namespace ConferenceTools\Speakers\Domain\Dashboard;
 
 use ConferenceTools\Speakers\Domain\Speaker\Event\AccommodationBooked;
 use ConferenceTools\Speakers\Domain\Speaker\Event\AccommodationRequested;
+use ConferenceTools\Speakers\Domain\Speaker\Event\AdditionalTalkWasAdded;
 use ConferenceTools\Speakers\Domain\Speaker\Event\StationPickupAccepted;
 use ConferenceTools\Speakers\Domain\Speaker\Event\StationPickupRejected;
 use ConferenceTools\Speakers\Domain\Speaker\Event\StationPickupRequested;
@@ -40,6 +41,9 @@ class SpeakerProjector implements Handler
                 break;
             case $message instanceof SpeakerAcceptedInvitation:
                 $this->acceptInvitation($message);
+                break;
+            case $message instanceof AdditionalTalkWasAdded:
+                $this->addTalk($message);
                 break;
             case $message instanceof TalkWasUpdated:
                 $this->updateTalk($message);
@@ -95,11 +99,7 @@ class SpeakerProjector implements Handler
     private function createSpeaker(SpeakerWasInvited $message)
     {
         $speaker = new Speaker($message->getIdentity(), $message->getName(), $message->getEmail(), $message->getBio());
-        foreach ($message->getTalks() as $index => $talk) {
-            $speaker->addTalk($index, $talk);
-        }
         $this->repository->add($speaker);
-
     }
 
     private function acceptInvitation(SpeakerAcceptedInvitation $message)
@@ -193,5 +193,11 @@ class SpeakerProjector implements Handler
     {
         $speaker = $this->fetchSpeaker($message->getSpeakerId());
         $speaker->accommodationBooked(...$message->getDates());
+    }
+
+    private function addTalk(AdditionalTalkWasAdded $message)
+    {
+        $speaker = $this->fetchSpeaker($message->getId());
+        $speaker->addTalk($message->getTalkId(), $message->getTalk());
     }
 }

@@ -32,6 +32,7 @@ return [
                     'defaults' => [
                         'controller' => Controller\Admin\ImportController::class,
                         'action' => 'index',
+                        'layout' => 'admin/layout',
                     ],
                 ]
             ],

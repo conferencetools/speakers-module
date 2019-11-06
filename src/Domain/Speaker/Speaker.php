@@ -20,7 +20,6 @@ use ConferenceTools\Speakers\Domain\Speaker\Event\TravelReimbursementAccepted;
 use ConferenceTools\Speakers\Domain\Speaker\Event\TravelReimbursementPaid;
 use ConferenceTools\Speakers\Domain\Speaker\Event\TravelReimbursementRejected;
 use ConferenceTools\Speakers\Domain\Speaker\Event\TravelReimbursementRequested;
-use mysql_xdevapi\Exception;
 use Phactor\Actor\AbstractActor;
 use ConferenceTools\Speakers\Domain\Speaker\Command\AcceptInvitation;
 use ConferenceTools\Speakers\Domain\Speaker\Command\AddAdditionalTalk;
@@ -53,13 +52,13 @@ class Speaker extends AbstractActor
 
     private $email;
     private $name;
-    private $talks;
+    private $talks = [];
     private $bio;
     private $accepted;
     private $journeys;
     private $travelReimbursementRequests = [];
     private $stationPickups = [];
-    private $accomodation = [];
+    private $accommodation = [];
 
     protected function handleInviteToSpeak(InviteToSpeak $command)
     {
@@ -69,8 +68,7 @@ class Speaker extends AbstractActor
                     $this->id(),
                     $command->getName(),
                     $command->getBio(),
-                    $command->getEmail(),
-                    ... $command->getTalks()
+                    $command->getEmail()
                 )
             );
         }
@@ -81,7 +79,6 @@ class Speaker extends AbstractActor
         $this->email = $event->getEmail();
         $this->name = $event->getName();
         $this->bio = $event->getBio();
-        $this->talks = $event->getTalks();
     }
 
     /**
@@ -288,8 +285,8 @@ class Speaker extends AbstractActor
     protected function applyAccommodationRequested(AccommodationRequested $event)
     {
         foreach ($event->getDates() as $date) {
-            if (!isset($this->accomodation[$date])) {
-                $this->accomodation[$date] = self::ACCOMMODATION_REQUESTED;
+            if (!isset($this->accommodation[$date])) {
+                $this->accommodation[$date] = self::ACCOMMODATION_REQUESTED;
             }
         }
     }
@@ -302,8 +299,8 @@ class Speaker extends AbstractActor
     protected function applyAccommodationBooked(AccommodationBooked $event)
     {
         foreach ($event->getDates() as $date) {
-            if (isset($this->accomodation[$date])) {
-                $this->accomodation[$date] = self::ACCOMMODATION_BOOKED;
+            if (isset($this->accommodation[$date])) {
+                $this->accommodation[$date] = self::ACCOMMODATION_BOOKED;
             }
         }
     }
