@@ -139,7 +139,7 @@ class SpeakerProjector implements Handler
     private function travelReimbursementRequested(TravelReimbursementRequested $message)
     {
         $speaker = $this->fetchSpeaker($message->getSpeakerId());
-        $speaker->addTravelReimbursement($message->getReimbursementRequestId(), $message->getAmount(), $message->getNotes());
+        $speaker->addTravelReimbursement($message->getReimbursementRequestId(), $message->getAmount(), $message->getNotes(), $message->getFile());
     }
 
     private function travelReimbursementAccepted(TravelReimbursementAccepted $message)

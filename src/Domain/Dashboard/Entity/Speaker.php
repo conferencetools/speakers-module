@@ -246,9 +246,9 @@ class Speaker
         $this->talks->removeElement($talk);
     }
 
-    public function addTravelReimbursement(string $reimbursementRequestId, int $amount, string $notes)
+    public function addTravelReimbursement(string $reimbursementRequestId, int $amount, string $notes, string $fileId)
     {
-        $travelReimbursement = new TravelReimbursement($this, $reimbursementRequestId, $amount, $notes);
+        $travelReimbursement = new TravelReimbursement($this, $reimbursementRequestId, $amount, $notes, $fileId);
         $this->travelReimbursements->add($travelReimbursement);
     }
 

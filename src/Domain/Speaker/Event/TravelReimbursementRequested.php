@@ -17,7 +17,7 @@ class TravelReimbursementRequested
     /** @Jms\Type("string") */
     private $reimbursementRequestId;
 
-    public function __construct(string $speakerId, int $amount, string $notes, string $file, string $reimbursementRequestId)
+    public function __construct(string $speakerId, int $amount, string $notes, ?string $file, string $reimbursementRequestId)
     {
         $this->speakerId = $speakerId;
         $this->amount = $amount;
@@ -41,7 +41,7 @@ class TravelReimbursementRequested
         return $this->notes;
     }
 
-    public function getFile(): string
+    public function getFile(): ?string
     {
         return $this->file;
     }

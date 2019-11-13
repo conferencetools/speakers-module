@@ -16,7 +16,7 @@ class RequestTravelReimbursement implements HasActorId
     /** @Jms\Type("string") */
     private $file;
 
-    public function __construct(string $speakerId, int $amount, string $notes, string $file)
+    public function __construct(string $speakerId, int $amount, string $notes, ?string $file)
     {
         $this->speakerId = $speakerId;
         $this->amount = $amount;
@@ -44,7 +44,7 @@ class RequestTravelReimbursement implements HasActorId
         return $this->notes;
     }
 
-    public function getFile(): string
+    public function getFile(): ?string
     {
         return $this->file;
     }

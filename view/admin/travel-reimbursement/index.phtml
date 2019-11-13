@@ -10,7 +10,7 @@
             <div class="card-body ">
                 <table class="table table-in-card">
                     <thead>
-                    <tr><th>Speaker</th><th>Amount</th><th>Status</th><th></th></tr>
+                    <tr><th>Speaker</th><th>Amount</th><th>Status</th><th>Receipt/Invoice</th><th></th></tr>
                     </thead>
                     <tbody>
                     <?php foreach ($this->travelReimbursements as $travelReimbursement): ?>
@@ -21,6 +21,13 @@
                             <td><a href="<?=$this->url('speakers/speaker', ['speakerId' => $speaker->getIdentity()])?>"><?=$this->escapeHtml($speaker->getName())?></a></td>
                             <td>£<?=$travelReimbursement->getAmount() / 100?></td>
                             <td><?=$travelReimbursement->getStatus()?></td>
+                            <td>
+                                <?php if ($travelReimbursement->getFileId() === null):?>
+                                    No attachment
+                                <?php else: ?>
+                                    <a href="<?=$this->url('speakers/files', ['fileId' => $travelReimbursement->getFileId()])?>">View</a>
+                                <?php endif?>
+                            </td>
                             <td>
                                 <?php if ($travelReimbursement->isRequested()):?>
                                     <a class="btn btn-primary" href="<?=$this->url('speakers/speaker/travel-reimbursement/accept', ['reimbursementRequestId' => $travelReimbursement->getReimbursementRequestId(), 'speakerId' => $speaker->getIdentity()])?>">Accept</a>

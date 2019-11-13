@@ -2,6 +2,7 @@
 
 namespace ConferenceTools\Speakers\Form;
 
+use Zend\Form\Element\File;
 use Zend\Form\Element\Submit;
 use Zend\Form\Element\Text;
 use Zend\Form\Element\Textarea;
@@ -17,6 +18,15 @@ class RequestTravelReimbursementForm extends Form
             'options' => [
                 'label' => 'Amount',
                 'help-block' => 'Please enter the cost of travel in £ eg 147.19'
+            ]
+        ]);
+
+        $this->add([
+            'type' =>File::class,
+            'name' => 'file',
+            'options' => [
+                'label' => 'Receipt or invoice',
+                'help-block' => 'You can upload an invoice or travel receipts here. PDF format preferred.'
             ]
         ]);
 

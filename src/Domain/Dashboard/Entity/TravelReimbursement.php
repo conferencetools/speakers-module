@@ -49,13 +49,16 @@ class TravelReimbursement
      * @ORM\Column(type="string")
      */
     private $rejectReason = '';
+    /** @ORM\Column(type="string", nullable=true) */
+    private $fileId;
 
-    public function __construct(Speaker $speaker, string $reimbursementRequestId, int $amount, string $requestNotes)
+    public function __construct(Speaker $speaker, string $reimbursementRequestId, int $amount, string $requestNotes, ?string $fileId)
     {
         $this->speaker = $speaker;
         $this->reimbursementRequestId = $reimbursementRequestId;
         $this->amount = $amount;
         $this->requestNotes = $requestNotes;
+        $this->fileId = $fileId;
     }
 
     public function getSpeaker(): Speaker
@@ -96,6 +99,11 @@ class TravelReimbursement
     public function getRejectReason(): string
     {
         return $this->rejectReason;
+    }
+
+    public function getFileId(): ?string
+    {
+        return $this->fileId;
     }
 
     public function reject(string $reason): void

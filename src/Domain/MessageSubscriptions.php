@@ -67,6 +67,9 @@ class MessageSubscriptions
             SpeakerCommand\BookAccommodation::class => [
                 Speaker::class,
             ],
+            File\Command\StoreFile::class => [
+                File\FileProjector::class
+            ],
 
 
             SpeakerEvent\SpeakerWasInvited::class => [

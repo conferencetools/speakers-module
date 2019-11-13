@@ -69,7 +69,7 @@ $speaker = $this->speaker
             <div class="card-body ">
                 <table class="table table-in-card">
                     <thead>
-                    <tr><th>Amount</th><th>Status</th><th>Notes</th><th></th></tr>
+                    <tr><th>Amount</th><th>Status</th><th>Notes</th><th>Receipt/Invoice</th><th></th></tr>
                     </thead>
                     <tbody>
                     <?php foreach ($speaker->getTravelReimbursements() as $reimbursement): ?>
@@ -88,6 +88,13 @@ $speaker = $this->speaker
                                 <?php endif?>
                                 <?php if ($reimbursement->isPaid() && $reimbursement->getPaymentNotes() !== ''): ?>
                                     <p><?=$this->escapeHtml($reimbursement->getPaymentNotes())?></p>
+                                <?php endif?>
+                            </td>
+                            <td>
+                                <?php if ($reimbursement->getFileId() === null):?>
+                                    No attachment
+                                <?php else: ?>
+                                    <a href="<?=$this->url('speakers/files', ['fileId' => $reimbursement->getFileId()])?>">View</a>
                                 <?php endif?>
                             </td>
                             <td>

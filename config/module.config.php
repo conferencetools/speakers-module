@@ -12,6 +12,15 @@ return [
             ]
         ]
     ],
+    'bsb_flysystem' => [
+        'filesystems' => [
+            'speaker_files' => [
+                'adapter' => 'speaker_files',
+                'cache' => false,
+                'eventable' => false,
+            ],
+        ],
+    ],
     'controllers' => require __DIR__ . '/controllers.config.php',
     'controller_plugins' => [
         'invokables' => [
@@ -31,4 +40,11 @@ return [
         ],
         'template_map' => require __DIR__ . '/views.config.php',
     ],
+
+    'service_manager' => [
+        'factories' => [
+            \League\Flysystem\MountManager::class => \ConferenceTools\Speakers\Files\MountManagerFactory::class,
+            \ConferenceTools\Speakers\Files\StoreFileService::class => \ConferenceTools\Speakers\Files\StoreFileServiceFactory::class,
+        ]
+    ]
 ];

@@ -25,6 +25,16 @@ return [
                     ]
                 ]
             ],
+            'files' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/file/:fileId[/:filename]',
+                    'defaults' => [
+                        'action' => 'download',
+                        'controller' => Controller\FileController::class,
+                    ],
+                ],
+            ],
             'import' => [
                 'type' => Segment::class,
                 'options' => [

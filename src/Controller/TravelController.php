@@ -6,6 +6,7 @@ use ConferenceTools\Speakers\Domain\Speaker\Command\ProvideJourneyDetails;
 use ConferenceTools\Speakers\Domain\Speaker\Command\RequestStationPickup;
 use ConferenceTools\Speakers\Domain\Speaker\Command\RequestTravelReimbursement;
 use ConferenceTools\Speakers\Domain\Speaker\Journey;
+use ConferenceTools\Speakers\Files\StoreFileService;
 use ConferenceTools\Speakers\Form\ProvideTravelDetails;
 use ConferenceTools\Speakers\Form\RequestStationPickupForm;
 use ConferenceTools\Speakers\Form\RequestTravelReimbursementForm;
@@ -13,6 +14,13 @@ use Zend\View\Model\ViewModel;
 
 class TravelController extends AppController
 {
+    private $fileService;
+
+    public function __construct(StoreFileService $fileService)
+    {
+        $this->fileService = $fileService;
+    }
+
     public function provideTravelDetailsAction()
     {
         $speaker = $this->currentSpeaker();
@@ -52,16 +60,22 @@ class TravelController extends AppController
         $form = $this->form(RequestTravelReimbursementForm::class);
 
         if ($this->getRequest()->isPost()) {
-            $data = $this->params()->fromPost();
+            $data = array_merge($this->params()->fromPost(), $this->params()->fromFiles());
             $form->setData($data);
 
             if ($form->isValid()) {
                 $data = $form->getData();
+                $fileId = null;
+                if (isset($data['file']['tmp_name'])) {
+                    $fileId = $this->fileService->store($data['file'], $speaker->getIdentity());
+                }
+
+
                 $command = new RequestTravelReimbursement(
                     $speaker->getIdentity(),
                     $data['amount'] * 100,
                     $data['notes'],
-                    ''
+                    $fileId
                 );
                 $this->messageBus()->fire($command);
 

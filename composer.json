@@ -1,7 +1,6 @@
 {
   "name": "conferencetools/speakers-module",
   "description": "Provides speaker management and CRM functions",
-  "minimum-stability": "dev",
   "license": "MIT",
   "require": {
     "php": "^7.2",
@@ -9,7 +8,9 @@
     "zendframework/zend-form": "^2.12",
     "zendframework/zend-i18n": "^2.9@dev",
     "phactor/phactor": "dev-master",
-    "ext-json": "*"
+    "ext-json": "*",
+    "bushbaby/flysystem": "^4.0",
+    "superbalist/flysystem-google-storage": "^7.2"
   },
   "autoload": {
     "psr-4": {
