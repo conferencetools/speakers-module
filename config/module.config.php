@@ -29,7 +29,14 @@ return [
     ],
     'doctrine' => require __DIR__ . '/doctrine.config.php',
     'message_handlers' => require __DIR__ . '/message_handlers.config.php',
-    'message_subscriptions' => \ConferenceTools\Speakers\Domain\MessageSubscriptions::getSubscriptions(),
+    'message_subscriptions' => [
+        \ConferenceTools\Speakers\Domain\Speaker\Event\SpeakerWasInvited::class => [
+            \ConferenceTools\Speakers\Emails\EmailInvite::class,
+        ]
+    ],
+    'message_subscription_providers' => [
+        \ConferenceTools\Speakers\Domain\MessageSubscriptions::getSubscriptions(),
+    ],
     'navigation' => require __DIR__ . '/navigation.config.php',
     'router' => [
         'routes' => require __DIR__ . '/routes.config.php',
