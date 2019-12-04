@@ -35,7 +35,7 @@ return [
         ]
     ],
     'message_subscription_providers' => [
-        \ConferenceTools\Speakers\Domain\MessageSubscriptions::getSubscriptions(),
+        \ConferenceTools\Speakers\Domain\MessageSubscriptions::class,
     ],
     'navigation' => require __DIR__ . '/navigation.config.php',
     'router' => [
