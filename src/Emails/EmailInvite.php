@@ -42,7 +42,7 @@ class EmailInvite implements Handler
             return;
         }
         /** @var Speaker $speaker */
-        $speaker = $this->speakerRepository->get($message->getId());
+        $speaker = $this->speakerRepository->get($message->getIdentity());
 
         $viewModel = new ViewModel([
             'speaker' => $speaker,
