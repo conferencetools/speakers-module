@@ -9,7 +9,7 @@
     "zendframework/zend-i18n": "^2.9@dev",
     "phactor/phactor": "dev-master",
     "ext-json": "*",
-    "bushbaby/flysystem": "^4.0",
+    "bushbaby/flysystem": "^5.0",
     "superbalist/flysystem-google-storage": "^7.2",
     "zendframework/zend-mail": "^2.10"
   },

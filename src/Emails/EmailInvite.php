@@ -54,7 +54,7 @@ class EmailInvite implements Handler
         $html = $response->getContent();
 
         $emailMessage = $this->buildMessage($html);
-        $emailMessage->setTo($message->getEmail());
+        $emailMessage->setTo($message->getEmail()->getEmail());
 
         $this->mail->send($emailMessage);
     }
