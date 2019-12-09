@@ -41,14 +41,12 @@ class EmailInvite implements Handler
         if (!($message instanceof SpeakerWasInvited)) {
             return;
         }
-        /** @var Speaker $speaker */
-        $speaker = $this->speakerRepository->get($message->getIdentity());
 
         $viewModel = new ViewModel([
-            'speaker' => $speaker,
+            'speaker' => $message->getName(),
             'config'=> $this->config,
         ]);
-        $viewModel->setTemplate('email/invite');
+        $viewModel->setTemplate('email/speaker-invite');
 
         $response = new Response();
         $this->view->setResponse($response);
@@ -56,7 +54,7 @@ class EmailInvite implements Handler
         $html = $response->getContent();
 
         $emailMessage = $this->buildMessage($html);
-        $emailMessage->setTo($speaker->getEmail());
+        $emailMessage->setTo($message->getEmail());
 
         $this->mail->send($emailMessage);
     }
