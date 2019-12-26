@@ -52,6 +52,17 @@ $speaker = $this->speaker
                 </table>
             </div>
         </div>
+        <div class="card spur-card">
+            <div class="card-header">
+                <div class="spur-card-icon">
+                    <i class="fas fa-table"></i>
+                </div>
+                <div class="spur-card-title">Contact organisers</div>
+            </div>
+            <div class="card-body ">
+                If you need to contact the organisers with questions or requests you can email <a href="mailto:speakers@phpyorkshire.co.uk">speakers@phpyorkshire.co.uk</a>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -211,10 +222,10 @@ $speaker = $this->speaker
             </div>
             <div class="card-body ">
                 <dl>
-                    <dt>Accommodation name</dt><dd></dd>
-                    <dt>Accommodation address</dt><dd></dd>
-                    <dt>Accommodation phone number</dt><dd></dd>
-                    <dt>Nights booked</dt><dd></dd>
+                    <dt>Accommodation name</dt><dd>Franklin House, University of York</dd>
+                    <dt>Accommodation address</dt><dd>Alcuin Reception, Block D, Alcuin Way, Heslington YO10 5DD</dd>
+                    <dt>Accommodation phone number</dt><dd>01904 328431</dd>
+                    <dt>Website</dt><dd><a href="https://yorkconferences.com/franklin-house/">https://yorkconferences.com/franklin-house/</a></dd>
                 </dl>
             </div>
         </div>
@@ -228,6 +239,19 @@ $speaker = $this->speaker
                 <div class="spur-card-title">Accommodation booking</div>
             </div>
             <div class="card-body ">
+                <p>
+                    We have a block booking at the venue for speakers to use. If you wish for us to book your accommodation
+                    please request below. Anyone giving a talk can request Friday and Saturday night, if you are giving a workshop
+                    you can also request Thursday night. All rooms are single occupancy and include breakfast.
+                </p>
+                <p>
+                    We may have some spare capacity on Thursday night, speakers who wish to use this can request an additional night,
+                    but priority will go to workshop speakers.
+                </p>
+                <p>
+                    We have a limited number of double rooms, if you want to bring a partner with you please email and let us know as
+                    soon as possible so we can ensure a double room is reserved for you.
+                </p>
                 <?php if ($speaker->hasRequestedAccommodation()):?>
                 <?php $requestedDates = $speaker->getAccommodation();?>
                 <dl>
@@ -256,9 +280,9 @@ $speaker = $this->speaker
             </div>
             <div class="card-body ">
                 <dl>
-                    <dt>Name</dt><dd></dd>
-                    <dt>Address</dt><dd></dd>
-                    <dt>Dates</dt><dd></dd>
+                    <dt>Workshop venue (Friday)</dt><dd>The Piazza Learning centre, University of York</dd>
+                    <dt>Conference venue (Saturday)</dt><dd>The Ron Cooke Hub, University of York</dd>
+                    <dt>Address</dt><dd>133 Deramore Ln, York YO10 5GE</dd>
                 </dl>
             </div>
         </div>
@@ -269,16 +293,18 @@ $speaker = $this->speaker
                 <div class="spur-card-icon">
                     <i class="fas fa-table"></i>
                 </div>
-                <div class="spur-card-title">Av information</div>
+                <div class="spur-card-title">More information</div>
             </div>
             <div class="card-body ">
-                <p>Add information here about AV details</p>
+                <p>As we get closer to the conference, we'll update this page with any other information we think you might need. We'll also send it through by email. This speaker hub
+                    is intended to collect all relevant information into one place for you.
+                </p>
             </div>
         </div>
     </div>
 </div>
 
-<div class="row">
+<!--<div class="row">
     <div class="col-md-6">
         <div class="card spur-card">
             <div class="card-header">
@@ -293,4 +319,4 @@ $speaker = $this->speaker
             </div>
         </div>
     </div>
-</div>
+</div>-->
