@@ -17,7 +17,7 @@ $speaker = $this->speaker
                     <dt>Email</dt><dd><?=$this->escapeHtml($speaker->getEmail())?></dd>
                     <dt>Twitter</dt><dd><?=$this->escapeHtml($speaker->getTwitter())?></dd>
                     <dt>Company</dt><dd><?=$this->escapeHtml($speaker->getCompany())?></dd>
-                    <dt>Bio</dt><dd><?=$this->escapeHtml($speaker->getAboutMe())?></dd>
+                    <dt>Bio</dt><dd><?=nl2br($this->escapeHtml($speaker->getAboutMe()))?></dd>
                     <dt>Dietary Preference</dt><dd><?=ucfirst($speaker->getPreference())?></dd>
                     <dt>Allergies</dt><dd><?=$this->escapeHtml($speaker->getAllergies())?></dd>
                     <dt>Accessibility requirements</dt><dd><?=$this->escapeHtml($speaker->getSpecialRequirements())?></dd>
@@ -43,7 +43,7 @@ $speaker = $this->speaker
                     <?php foreach ($speaker->getTalks() as $talk): ?>
                         <tr>
                             <td><?=$this->escapeHtml($talk->getTitle())?></td>
-                            <td><?=$this->escapeHtml($talk->getAbstract())?></td>
+                            <td><?=nl2br($this->escapeHtml($talk->getAbstract()))?></td>
                             <td>
                                 <a class="btn btn-primary" href="<?=$this->url('speakers/speaker/talk/edit', ['talkId' => $talk->getIndex(), 'speakerId' => $speaker->getIdentity()])?>">Edit</a>
                                 <a class="btn btn-danger" href="<?=$this->url('speakers/speaker/talk/cancel', ['talkId' => $talk->getIndex(), 'speakerId' => $speaker->getIdentity()])?>">Cancel</a>
